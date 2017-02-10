@@ -64,7 +64,12 @@ main_loop:       BRS  poll_inputs
 				 
 ;---------------------------------------------------------------------------------;				 
 				 
-drive_motor_0:	LOAD  R0  [GB+PREVTIMESTAMP0]        ;   
+drive_motor_0:	PUSH  R0
+				PUSH  R1
+				PUSH  R2
+				PUSH  R3
+
+				LOAD  R0  [GB+PREVTIMESTAMP0]        ;   
 				LOAD  R1  [R5+TIMER]                
                 LOAD  R3  [GB+OUTPUT]
                  SUB  R0  R1                         ; R0 = prev_timestamp - current_timer
@@ -87,8 +92,16 @@ motor0off:       AND  R3  %100						 ; turn the motor off
 				 
 update_ts0:		 CMP  R0  100						 ; if 100 clock ticks have passed, turn the motor off
 				 BLE  r_drive_motor_0
+				LOAD  R1  [R5+TIMER]
 				STOR  R1  [GB+PREVTIMESTAMP0]
-r_drive_motor_0: RTS								 ; return
+				
+r_drive_motor_0:
+				PULL  R3
+				PULL  R2
+				PULL  R1
+				PULL  R0
+				
+				RTS								 ; return
 
 ;---------------------------------------------------------------------------------;
 				 
