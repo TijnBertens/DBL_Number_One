@@ -57,14 +57,24 @@ main_loop:       BRS  poll_inputs
 				
                  BRA  main_loop                      ; Loop back to the start of the loop.
 				 
-drive_motor_0:	LOAD  R0  [GB+PREVTIMESTAMP0]
-				LOAD  R1  [R5+TIMER]
-				 SUB  R0  R1 
-				 CMP  R0  [GB+MOTORSPEED0]
-				 BGE  motor0off
-				 
-				 
-				 
+drive_motor_0:	LOAD  R0  [GB+PREVTIMESTAMP0]        ;   
+				LOAD  R1  [R5+TIMER]                
+                LOAD  R3  [GB+OUTPUT]
+                 SUB  R0  R1                         ; R0 = prev_timestamp - current_timer
+				 CMP  R0  [GB+MOTORSPEED0]           ; if (prev_timestamp - current_timer) > motorspeed
+				 BGE  motor0off                      ; then motor off
+                LOAD  R2  [GB+MOTORDIRECTION0]       ; else motor on
+                 CMP  R2  0   
+                 BEQ  motor0left               
+                  OR  R3  %001
+                STOR  R3  [GB+OUTPUT]
+                 RTS            
+motor0left:       OR  R3  %010
+                STOR  R3  [GB+OUTPUT]
+                 RTS
+motor0off:       AND  R3  %100
+                STOR  R3  [GB+OUTPUT]
+                 RTS
 				 
 poll_inputs:	LOAD  R0  [R5+INPUT]			; get the new button state and update the previous button state
 				LOAD  R1  [GB+INPUTSTATE]
