@@ -73,8 +73,14 @@ main_loop:       BRS  poll_inputs
                 STOR  R0  [GB+MOTORSPEED2]
                  BRS  display_decimal_number
                 ; BRS  drive_motor_0		
-                 ;BRS  drive_motor_1		
-                 BRS  drive_motor_2		                 		
+                 
+                 ;LOAD  R0  [R5+TIMER]
+				 BRS  drive_motor_2		
+				 BRS  drive_motor_1		
+				  ;BRS  sleep
+				  ;SUB  R0  [R5+TIMER]
+				  ;BRS  display_decimal_number
+				 
                  BRA  main_loop                      ; Loop back to the start of the loop.
 				 
 ;---------------------------------------------------------------------------------;				 
@@ -95,15 +101,15 @@ drive_motor_0:	PUSH  R0
                 LOAD  R2  [GB+MOTORDIRECTION0]       ; else motor on
                  CMP  R2  0   						 ; check if the motor direction is 0 (left)
                  BEQ  motor0left               		 ; if (motordirection == 0) go to motor0left
-                 AND  R3  %100						 ; turn the motor off
+                 AND  R3  %111100						 ; turn the motor off
                   OR  R3  %001						 ; turn on the motor to the right
                 STOR  R3  [R5+OUTPUT]		
                  BRA  update_ts0
-motor0left:      AND  R3  %100						 ; turn the motor off
+motor0left:      AND  R3  %111100						 ; turn the motor off
 				  OR  R3  %010						 ; turn on the motor to the left
                 STOR  R3  [R5+OUTPUT]
                  BRA  update_ts0
-motor0off:       AND  R3  %100						 ; turn the motor off
+motor0off:       AND  R3  %111100						 ; turn the motor off
                 STOR  R3  [R5+OUTPUT]
                  BRA  update_ts0
 				 
@@ -193,7 +199,7 @@ motor2left:      AND  R3  %1001111					 ; turn the motor off
 				  OR  R3  %0100000					 ; turn on the motor to the left
                 STOR  R3  [R5+OUTPUT]
                  BRA  update_ts2
-motor2off:       AND  R3  %1000000					 ; turn the motor off
+motor2off:       AND  R3  %1001111					 ; turn the motor off
                 STOR  R3  [R5+OUTPUT]
                  BRA  update_ts2
 				 
