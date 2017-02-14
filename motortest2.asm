@@ -3,7 +3,7 @@
   ANALOG1			DW  0
   INPUTSTATE		DW  0
   PREVINPUTSTATE    DW  0
-  NXT_DSP           DW  0       ; The next display to update, modulo 100
+  NXT_DSP           DW  100       ; The next display to update, modulo 100
   
   ; MOTOR 1
   NEXTTIME0         DW  0
@@ -250,20 +250,22 @@ display_decimal_number:
              LOAD  R3 [GB+NXT_DSP]
               ADD  R3 1
              STOR  R3 [GB+NXT_DSP]
-              DIV  R3 100
-              CMP  R3 0
-              BEQ  dsp_0
+             DVMD  R3 100
+              CMP  R4 0
+              BNE  r_display
               CMP  R3 1
-              BEQ  dsp_1
+              BEQ  dsp_0
               CMP  R3 2
-              BEQ  dsp_2
+              BEQ  dsp_1
               CMP  R3 3
-              BEQ  dsp_3
+              BEQ  dsp_2
               CMP  R3 4
-              BEQ  dsp_4
+              BEQ  dsp_3
               CMP  R3 5
+              BEQ  dsp_4
+              CMP  R3 6
               BEQ  dsp_5
-             LOAD  R3 0
+             LOAD  R3 1
              STOR  R3 [GB+NXT_DSP]
               BRA  r_display
              
