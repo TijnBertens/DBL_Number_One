@@ -69,17 +69,14 @@ main_loop:       BRS  poll_inputs
 				MULS  R0  100
 				 DIV  R0  255
                 STOR  R0  [GB+MOTORSPEED0]
-                STOR  R0  [GB+MOTORSPEED1]
-                STOR  R0  [GB+MOTORSPEED2]
+                ;STOR  R0  [GB+MOTORSPEED1]
+                ;STOR  R0  [GB+MOTORSPEED2]
                  BRS  display_decimal_number
-                ; BRS  drive_motor_0		
-                 
-                 ;LOAD  R0  [R5+TIMER]
-				 BRS  drive_motor_2		
-				 BRS  drive_motor_1		
-				  ;BRS  sleep
-				  ;SUB  R0  [R5+TIMER]
-				  ;BRS  display_decimal_number
+                LOAD  R0 1
+                STOR  R0 [GB+MOTORDIRECTION0]
+                STOR  R0 [GB+MOTORDIRECTION1]
+                STOR  R0 [GB+MOTORDIRECTION2]
+                 BRS  drive_motors
 				 
                  BRA  main_loop                      ; Loop back to the start of the loop.
 				 
@@ -98,54 +95,58 @@ drive_motors:	PUSH  R0
                 
 				 CMP  R1  [GB+MOTORSPEED0]           ; if (next_time - current_time) > motorspeed
 				 BGE  motorsoff                      ; then motor off
+                 
                 LOAD  R2  [GB+MOTORDIRECTION0]       ; else motor on
-                 CMP  R2  0   						 ; check if the motor direction is 0 (left)
+                 CMP  R2  0
+                 BEQ  motor1
+                 CMP  R2  -1   						 ; check if the motor direction is 0 (left)
                  BEQ  motor0lleft               		 ; if (motordirection == 0) go to motor0left
                  AND  R3  %111100						 ; turn the motor off
-                  OR  R3  %001						 ; turn on the motor to the right
+                  OR  R3  %000001						 ; turn on the motor to the right
                 STOR  R3  [R5+OUTPUT]		
-                 BRA  update_ts0
-motor0lleft:      AND  R3  %111100						 ; turn the motor off
-				  OR  R3  %010						 ; turn on the motor to the left
+                 BRA  motor1
+motor0lleft:     AND  R3  %111100						 ; turn the motor off
+				  OR  R3  %000010						 ; turn on the motor to the left
                 STOR  R3  [R5+OUTPUT]
 				
-				LOAD  R2  [GB+MOTORDIRECTION1]       ; else motor on
-				
-				;; hier -1, 0, 1 van maken
-                 CMP  R2  0   						 ; check if the motor direction is 0 (left)
+motor1:			LOAD  R2  [GB+MOTORDIRECTION1]       ; else motor on
+                 CMP  R2  0   						 ; check if the motor direction is 0 (off)
+                 BEQ  motor2                             ; if (motordirection == 0) go to motor1
+                 CMP  R1  -1
                  BEQ  motor1lleft               		 ; if (motordirection == 0) go to motor0left
                  AND  R3  %110011						 ; turn the motor off
                   OR  R3  %000100						 ; turn on the motor to the right
                 STOR  R3  [R5+OUTPUT]		
-                 BRA  update_ts0
-motor1lleft:      AND  R3  %110011						 ; turn the motor off
+                 BRA  motor2
+motor1lleft:     AND  R3  %110011						 ; turn the motor off
 				  OR  R3  %001000						 ; turn on the motor to the left
                 STOR  R3  [R5+OUTPUT]
 				
-				LOAD  R2  [GB+MOTORDIRECTION2]       ; else motor on
-                 CMP  R2  0   						 ; check if the motor direction is 0 (left)
-                 BEQ  motor2left               		 ; if (motordirection == 0) go to motor0left
+motor2:			LOAD  R2  [GB+MOTORDIRECTION2]       ; else motor on
+                 CMP  R2  0   						 ; check if the motor direction is 0 (off)
+                 BEQ  update_ts
+                 BEQ  motor2lleft               		 ; if (motordirection == 0) go to motor0left
                  AND  R3  %1001111						 ; turn the motor off
                   OR  R3  %0010000						 ; turn on the motor to the right
                 STOR  R3  [R5+OUTPUT]		
-                 BRA  update_ts0
-motor2left:      AND  R3  %1001111						 ; turn the motor off
+                 BRA  update_ts
+motor2lleft:     AND  R3  %1001111						 ; turn the motor off
 				  OR  R3  %0100000						 ; turn on the motor to the left
                 STOR  R3  [R5+OUTPUT]
 				
-                 BRA  update_ts0
+                 BRA  update_ts
 motorsoff:       AND  R3  %1000000						 ; turn the motor off
                 STOR  R3  [R5+OUTPUT]
-                 BRA  update_ts0
+                 BRA  update_ts
 				 
-update_ts0:		 CMP  R1  100						 ; if (next_time - current_time) < 
-				 BLE  r_drive_motor_0                ; then return
+update_ts:		 CMP  R1  100						 ; if (next_time - current_time) < 
+				 BLE  r_drive_motor                ; then return
 				LOAD  R0  [R5+TIMER]                 ; else set the next time to turn motor on
                  SUB  R1  100
                  SUB  R0  R1
 				STOR  R0  [GB+NEXTTIME0]
 				
-r_drive_motor_0:
+r_drive_motor:
 				PULL  R3
 				PULL  R2
 				PULL  R1
