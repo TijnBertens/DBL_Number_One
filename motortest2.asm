@@ -3,7 +3,7 @@
   ANALOG1			DW  0
   INPUTSTATE		DW  0
   PREVINPUTSTATE    DW  0
-  NXT_DSP           DW  0       ; The next display to update, modulo 100
+  NXT_DSP           DW  100       ; The next display to update, modulo 100
   
   ; MOTOR 1
   NEXTTIME0         DW  0
@@ -193,7 +193,7 @@ motor2left:      AND  R3  %1001111					 ; turn the motor off
 				  OR  R3  %0100000					 ; turn on the motor to the left
                 STOR  R3  [R5+OUTPUT]
                  BRA  update_ts2
-motor2off:       AND  R3  %1000000					 ; turn the motor off
+motor2off:       AND  R3  %1001111					 ; turn the motor off
                 STOR  R3  [R5+OUTPUT]
                  BRA  update_ts2
 				 
@@ -244,20 +244,22 @@ display_decimal_number:
              LOAD  R3 [GB+NXT_DSP]
               ADD  R3 1
              STOR  R3 [GB+NXT_DSP]
-              DIV  R3 100
-              CMP  R3 0
-              BEQ  dsp_0
+             DVMD  R3 100
+              CMP  R4 0
+              BNE  r_display
               CMP  R3 1
-              BEQ  dsp_1
+              BEQ  dsp_0
               CMP  R3 2
-              BEQ  dsp_2
+              BEQ  dsp_1
               CMP  R3 3
-              BEQ  dsp_3
+              BEQ  dsp_2
               CMP  R3 4
-              BEQ  dsp_4
+              BEQ  dsp_3
               CMP  R3 5
+              BEQ  dsp_4
+              CMP  R3 6
               BEQ  dsp_5
-             LOAD  R3 0
+             LOAD  R3 1
              STOR  R3 [GB+NXT_DSP]
               BRA  r_display
              
