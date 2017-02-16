@@ -17,12 +17,6 @@
   NEXTTIME2         DW  0
   MOTORSPEED2 		DW  0
   MOTORDIRECTION2   DW  0
-  
-@INCLUDE "motordriver.asm"
-@INCLUDE "buttonhandler.asm"
-@INCLUDE "displaydriver.asm"
-  
-@CODE
 
    IOAREA      EQU  -16  ;  address of the I/O-Area, modulo 2^18
     INPUT      EQU    7  ;  position of the input buttons (relative to IOAREA)
@@ -30,9 +24,16 @@
    DSPDIG      EQU    9  ;  relative position of the 7-segment display's digit selector
    DSPSEG      EQU    8  ;  relative position of the 7-segment display's segments
    TIMER       EQU   13
-   ADCONVS     EQU    6  ;  relative position of the A/D converters.
-
+   ADCONVS     EQU    6  ;  relative position of the A/D converters.  
+   
+@INCLUDE "motordriver.asm"
+@INCLUDE "buttonhandler.asm"
+@INCLUDE "displaydriver.asm"
+  
+@CODE
 begin :          BRA  main         ;  skip subroutine Hex7Seg
+
+
 ;  
 ;      Routine Hex7Seg maps a number in the range [0..15] to its hexadecimal
 ;      representation pattern for the 7-segment display.
@@ -69,20 +70,20 @@ main:		    LOAD  R5  IOAREA                ; R5 will store the start of the IOAR
                 STOR  R0  [GB+NEXTTIME1]
                 STOR  R0  [GB+NEXTTIME2]
 
-main_loop:       BRS  poll_inputs     
+main_loop:       ;BRS  poll_inputs     
 				LOAD  R0  [GB+ANALOG0]
 				MULS  R0  100
 				 DIV  R0  255
                 STOR  R0  [GB+MOTORSPEED0]
                 ;STOR  R0  [GB+MOTORSPEED1]
                 ;STOR  R0  [GB+MOTORSPEED2]
-                 BRS  display_decimal_number
+                 ;BRS  display_decimal_number
                 LOAD  R0 1
                 STOR  R0 [GB+MOTORDIRECTION0]
                 STOR  R0 [GB+MOTORDIRECTION1]
                 STOR  R0 [GB+MOTORDIRECTION2]
-                 BRS  drive_motors
-                 BRS  handle_btns
+                 ;BRS  drive_motors
+                 ;BRS  handle_btns
 				 
                  BRA  main_loop                      ; Loop back to the start of the loop.
 				 

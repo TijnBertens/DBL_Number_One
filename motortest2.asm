@@ -77,6 +77,7 @@ main_loop:       BRS  poll_inputs
                 STOR  R0 [GB+MOTORDIRECTION1]
                 STOR  R0 [GB+MOTORDIRECTION2]
                  BRS  drive_motors
+                 BRS  handle_btns
 				 
                  BRA  main_loop                      ; Loop back to the start of the loop.
 				 
@@ -458,6 +459,8 @@ r_handle_btns:
              PULL  R2
              PULL  R1
              PULL  R0
+             
+              RTS
 ;---------------------------------------------------------------------------------;	
 				
 sleep:		 PUSH  R0				; save registers

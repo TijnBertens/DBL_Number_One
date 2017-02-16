@@ -1,4 +1,6 @@
 @CODE
+BRA main
+   
 drive_motors:	PUSH  R0
 				PUSH  R1
 				PUSH  R2
