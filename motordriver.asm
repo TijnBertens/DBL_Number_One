@@ -1,6 +1,60 @@
 @CODE
 BRA main
    
+drive_motors1:	PUSH  R0
+				PUSH  R1
+				PUSH  R2
+				PUSH  R3
+				
+				LOAD  R0  [R5+TIMER]			;  R0 := current time
+
+m0:				LOAD  R1  [GB+MOTORPREVTIME]		;  R1 := prev time
+				LOAD  R2  R0					;  R2 := current time
+				 SUB  R2  R1					;  R2 := current - prev
+				 CMP  R2  [GB+MOTORSPEED0]      ;  if(R2 > motorspeed)
+				 BLE  m1	;dont turn off
+				
+				LOAD  R3  [GB+OUTPUTSTATE]			;  turn off motor 0
+				 AND  R3  %111111110
+				STOR  R3  [GB+OUTPUTSTATE]
+				
+m1:				LOAD  R1  [GB+MOTORPREVTIME]		;  R1 := prev time
+				LOAD  R2  R0					;  R2 := current time
+				 SUB  R2  R1					;  R2 := current - prev
+				 CMP  R2  [GB+MOTORSPEED1]      ;  if(R2 > motorspeed)
+				 BLE  m2	;dont turn off
+				
+				LOAD  R3  [GB+OUTPUTSTATE]			;  turn off motor 0
+				 AND  R3  %111111011
+				STOR  R3  [GB+OUTPUTSTATE]		
+				
+m2:				LOAD  R1  [GB+MOTORPREVTIME]		;  R1 := prev time
+				LOAD  R2  R0					;  R2 := current time
+				 SUB  R2  R1					;  R2 := current - prev
+				 CMP  R2  [GB+MOTORSPEED2]      ;  if(R2 > motorspeed)
+				 BLE  on	;dont turn off
+				
+				LOAD  R3  [GB+OUTPUTSTATE]			;  turn off motor 0
+				 AND  R3  %111101111
+				STOR  R3  [GB+OUTPUTSTATE]		
+				
+on:				 CMP  R2  100
+				 BLE  r_drive_motors1
+				LOAD  R3  [GB+OUTPUTSTATE]
+				  OR  R3  %000010101
+				STOR  R0  [GB+MOTORPREVTIME]
+				
+r_drive_motors1: LOAD  R0  [GB+OUTPUTSTATE]
+				STOR  R0  [R5+OUTPUT]
+				
+				PULL  R3
+				PULL  R2
+				PULL  R1
+				PULL  R0 
+				 RTS				
+				 
+   
+   
 drive_motors:	PUSH  R0
 				PUSH  R1
 				PUSH  R2

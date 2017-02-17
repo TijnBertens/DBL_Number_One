@@ -48,13 +48,13 @@ main:           LOAD  R5 IOAREA                 ; R5 will store the start of the
 ;
 loop:           LOAD  R0 [R5 + ADCONVS]         ; Load R0 with the current state of the knob.
                  AND  R0 %011111111      ; We're only interested in the last 8 bits, so put the other values to 0.
-                 CMP  R0 70
-                 BGE  loop_1
-                LOAD  R0 0
-                 BRA  loop_2
-loop_1:         LOAD  R0 30
-                ;MULS  R0 100
-                 ;DIV  R0 255                    ; R0 = n
+                 
+                 
+                
+                
+loop_1:         
+                MULS  R0 100
+                 DIV  R0 255                    ; R0 = n
 loop_2:         LOAD  R2 [R5 + TIMER]           ; R2 = y
                  SUB  R2 R3
                 MULS  R2 -1
