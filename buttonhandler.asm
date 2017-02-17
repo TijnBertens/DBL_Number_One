@@ -9,7 +9,7 @@ handle_btns: PUSH  R0
              LOAD  R0  [GB+PREVINPUTSTATE]
              LOAD  R1  [GB+INPUTSTATE]
               CMP  R0  0
-              BEQ  r_handle_btns
+              BNE  r_handle_btns
               CMP  R1  %000000001
               BEQ  btn_press0
               CMP  R1  %000000010

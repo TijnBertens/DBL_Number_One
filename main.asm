@@ -72,21 +72,22 @@ main:		    LOAD  R5  IOAREA                ; R5 will store the start of the IOAR
                 STOR  R0  [GB+NEXTTIME0]
                 STOR  R0  [GB+NEXTTIME1]
                 STOR  R0  [GB+NEXTTIME2]
-
-main_loop:       ;BRS  poll_inputs     
+                LOAD  R0  1
+                STOR  R0  [GB+MOTORDIRECTION0]
+                STOR  R0  [GB+MOTORDIRECTION1]
+                STOR  R0  [GB+MOTORDIRECTION2]
+                
+main_loop:       BRS  poll_inputs     
 				LOAD  R0  [GB+ANALOG0]
 				MULS  R0  100
 				 DIV  R0  255
                 STOR  R0  [GB+MOTORSPEED0]
                 ;STOR  R0  [GB+MOTORSPEED1]
                 ;STOR  R0  [GB+MOTORSPEED2]
-                 ;BRS  display_decimal_number
-                LOAD  R0 1
-                STOR  R0 [GB+MOTORDIRECTION0]
-                STOR  R0 [GB+MOTORDIRECTION1]
-                STOR  R0 [GB+MOTORDIRECTION2]
-                 ;BRS  drive_motors
-                 ;BRS  handle_btns
+                 BRS  display_decimal_number
+                
+                 BRS  drive_motors
+                 BRS  handle_btns
 				 
                  BRA  main_loop                      ; Loop back to the start of the loop.
 				 
@@ -110,8 +111,7 @@ poll_inputs:	PUSH  R0
 				
 				PULL  R1
 				PULL  R0
-				RTS
-			
+				RTS			
 ;---------------------------------------------------------------------------------;					
 sleep:		 PUSH  R0				; save registers
 			 PUSH  R1
