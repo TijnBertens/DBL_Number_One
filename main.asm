@@ -4,7 +4,8 @@
   INPUTSTATE		DW  0
   PREVINPUTSTATE    DW  0
   NXT_DSP           DW  100       ; The next display to update, modulo 100
-  
+  OUTPUTSTATE		DW  0
+  MOTORPREVTIME		DW  0
   ; MOTOR 1
   NEXTTIME0         DW  0
   PREVTIME0			DW  0
@@ -72,6 +73,7 @@ main:		    LOAD  R5  IOAREA                ; R5 will store the start of the IOAR
                 STOR  R0  [GB+NEXTTIME0]
                 STOR  R0  [GB+NEXTTIME1]
                 STOR  R0  [GB+NEXTTIME2]
+				STOR  R0  [GB+MOTORPREVTIME]
                 LOAD  R0  1
                 STOR  R0  [GB+MOTORDIRECTION0]
                 STOR  R0  [GB+MOTORDIRECTION1]
@@ -81,12 +83,14 @@ main_loop:       BRS  poll_inputs
 				LOAD  R0  [GB+ANALOG0]
 				MULS  R0  100
 				 DIV  R0  255
+				BRS  display_decimal_number
                 STOR  R0  [GB+MOTORSPEED0]
-                ;STOR  R0  [GB+MOTORSPEED1]
-                ;STOR  R0  [GB+MOTORSPEED2]
-                 BRS  display_decimal_number
+				 ADD  R0  30
+                STOR  R0  [GB+MOTORSPEED1]
+				ADD  R0  50
+                STOR  R0  [GB+MOTORSPEED2]
                 
-                 BRS  drive_motors
+                 BRS  drive_motors1
                  BRS  handle_btns
 				 
                  BRA  main_loop                      ; Loop back to the start of the loop.
