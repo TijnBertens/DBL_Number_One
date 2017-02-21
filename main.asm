@@ -21,10 +21,6 @@
   PREVTIME2			DW  0
   MOTORSPEED2 		DW  0
   MOTORDIRECTION2   DW  0
-  
-  ; DISC PLACER TESTING ;
-  TIMERBEGIN		DW  0
-  TIMERCURRENT		DW  0
 
    IOAREA      EQU  -16  ;  address of the I/O-Area, modulo 2^18
     INPUT      EQU    7  ;  position of the input buttons (relative to IOAREA)
@@ -82,6 +78,10 @@ main:		    LOAD  R5  IOAREA                ; R5 will store the start of the IOAR
                 STOR  R0  [GB+MOTORDIRECTION0]
                 STOR  R0  [GB+MOTORDIRECTION1]
                 STOR  R0  [GB+MOTORDIRECTION2]
+				LOAD  R0  75
+				STOR  R0  [GB+MOTORSPEED1]
+				LOAD  R0  0
+				STOR  R0  [GB+MOTORDIRECTION1]
                 
 main_loop:       BRS  poll_inputs     
 				LOAD  R0  [GB+ANALOG0]
@@ -89,43 +89,34 @@ main_loop:       BRS  poll_inputs
 				 DIV  R0  255
 				;BRS  display_decimal_number
                 STOR  R0  [GB+MOTORSPEED0]
-				 ADD  R0  30
-                STOR  R0  [GB+MOTORSPEED1]
+				 ;ADD  R0  30
+                ;STOR  R0  [GB+MOTORSPEED1]
 				ADD  R0  50
                 STOR  R0  [GB+MOTORSPEED2]
                 
+				LOAD  R0  [GB+INPUTSTATE]
+				LOAD  R1  [GB+PREVINPUTSTATE]
+				 XOR  R1  R0
+				 
+				LOAD  R2  R1
+				 AND  R2  R0
+				 AND  R2  %0010000
+				 CMP  R2  %0010000
+				 BNE  chk_dsk_off
+				LOAD  R2  1
+				STOR  R2  [GB+MOTORDIRECTION1]
 				
 				
-				
-				LOAD  R0  [GB+INPUTSTATE]		; get input state
-			     AND  R0  %01000				; R0:=check if button 4 is held down
-				LOAD  R1  R0					; R1:=check if button 4 is toggled
-				 XOR  R1  [GB+PREVINPUTSTATE]
-				 AND  R1  R0
-				
-				
-				 CMP  R1  %01000				; check if the button was toggled
-				 BNE  chk_btn_held  
-				LOAD  R2  [R5+TIMER]
-				STOR  R2  [GB+TIMERBEGIN]
-				
-chk_btn_held:    CMP  R0  %01000
-				 BNE  else	
-				LOAD  R0  60					; set motor speed to 100
-                STOR  R0  [GB+MOTORSPEED1]
-				LOAD  R0  [R5+TIMER]
-				STOR  R0  [GB+TIMERCURRENT]
-				 BRA  end_if
-else:			LOAD  R0  0						; set motor speed to 0
-                STOR  R0  [GB+MOTORSPEED1]				 
+chk_dsk_off:    LOAD  R2  R1
+				 AND  R2  R0
+				 AND  R2  %0100000
+				 CMP  R2  %0100000
+				 BNE  end_main_loop
+				LOAD  R2  0
+				STOR  R2  [GB+MOTORDIRECTION1]
 				
 				
-end_if:			LOAD  R0  [GB+TIMERBEGIN]
-				LOAD  R1  [GB+TIMERCURRENT]
-				 SUB  R0  R1
-				 BRS  display_decimal_number
-
-				 BRS  drive_motors1
+end_main_loop:   BRS  drive_motors1
                  BRS  handle_btns
 				 
                  BRA  main_loop                      ; Loop back to the start of the loop.
