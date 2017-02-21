@@ -94,29 +94,7 @@ main_loop:       BRS  poll_inputs
 				ADD  R0  50
                 STOR  R0  [GB+MOTORSPEED2]
                 
-				LOAD  R0  [GB+INPUTSTATE]
-				LOAD  R1  [GB+PREVINPUTSTATE]
-				 XOR  R1  R0
-				 
-				LOAD  R2  R1
-				 AND  R2  R0
-				 AND  R2  %0010000
-				 CMP  R2  %0010000
-				 BNE  chk_dsk_off
-				LOAD  R2  1
-				STOR  R2  [GB+MOTORDIRECTION1]
-				
-				
-chk_dsk_off:    LOAD  R2  R1
-				 AND  R2  R0
-				 AND  R2  %0100000
-				 CMP  R2  %0100000
-				 BNE  end_main_loop
-				LOAD  R2  0
-				STOR  R2  [GB+MOTORDIRECTION1]
-				
-				
-end_main_loop:   BRS  drive_motors1
+    			 BRS  drive_motors1
                  BRS  handle_btns
 				 
                  BRA  main_loop                      ; Loop back to the start of the loop.
