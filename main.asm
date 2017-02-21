@@ -1,10 +1,23 @@
 @DATA
+
+  ; INPUTS ;
+  PREVANALOG0		DW  0
   ANALOG0			DW  0
+  
+  PREVANALOG1		DW  0
   ANALOG1			DW  0
+  
   INPUTSTATE		DW  0
   PREVINPUTSTATE    DW  0
+  
+  ; MISC ;
   NXT_DSP           DW  100       ; The next display to update, modulo 100
   OUTPUTSTATE		DW  0
+  
+  ; COLOR SCANNER
+  SCANNEDCOLOR		DW  0		  ;  0 - white, 1 - background, 2 - blue
+  PREVSCANNEDCOLOR	DW  0
+  
   MOTORPREVTIME		DW  0
   ; MOTOR 1
   NEXTTIME0         DW  0
@@ -21,6 +34,8 @@
   PREVTIME2			DW  0
   MOTORSPEED2 		DW  0
   MOTORDIRECTION2   DW  0
+  
+  
 
    IOAREA      EQU  -16  ;  address of the I/O-Area, modulo 2^18
     INPUT      EQU    7  ;  position of the input buttons (relative to IOAREA)
@@ -33,6 +48,7 @@
 @INCLUDE "motordriver.asm"
 @INCLUDE "buttonhandler.asm"
 @INCLUDE "displaydriver.asm"
+@INCLUDE "scannerhandler.asm"
   
 @CODE
 begin :          BRA  main         ;  skip subroutine Hex7Seg
@@ -84,6 +100,8 @@ main:		    LOAD  R5  IOAREA                ; R5 will store the start of the IOAR
 				STOR  R0  [GB+MOTORDIRECTION1]
                 
 main_loop:       BRS  poll_inputs     
+				 BRS  handle_btns
+				 BRS  handle_scanners
 				LOAD  R0  [GB+ANALOG0]
 				MULS  R0  100
 				 DIV  R0  255
@@ -92,7 +110,7 @@ main_loop:       BRS  poll_inputs
                 STOR  R0  [GB+MOTORSPEED2]
                 
     			 BRS  drive_motors1
-                 BRS  handle_btns
+                 
 				 
                  BRA  main_loop                      ; Loop back to the start of the loop.
 				 
@@ -106,13 +124,17 @@ poll_inputs:	PUSH  R0
 				STOR  R1  [GB+PREVINPUTSTATE]
 				
 				LOAD  R0  [R5+ADCONVS]			; get the value on adconvs port 0
+				LOAD  R1  [GB+ANALOG0] 
 				 AND  R0  %011111111	
 				STOR  R0  [GB+ANALOG0]
+				STOR  R1  [GB+PREVANALOG0]
 				
 				LOAD  R0  [R5+ADCONVS]			; get the value on adconvs port 1
+				LOAD  R1  [GB+ANALOG1] 
 				 DIV  R0  %010000000
 				 AND  R0  %011111111
 				STOR  R0  [GB+ANALOG1]
+				STOR  R1  [GB+PREVANALOG1]
 				
 				PULL  R1
 				PULL  R0
