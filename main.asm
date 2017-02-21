@@ -19,21 +19,27 @@
   PREVSCANNEDCOLOR	DW  0
   
   MOTORPREVTIME		DW  0
-  ; MOTOR 1
+  ; MOTOR 0 - X-AXIS
   NEXTTIME0         DW  0
   PREVTIME0			DW  0
   MOTORSPEED0 		DW  0
   MOTORDIRECTION0   DW  0
-  ; MOTOR 2
+  ; MOTOR 1 - EXTRUDOR
   NEXTTIME1         DW  0
   PREVTIME1			DW  0
   MOTORSPEED1 		DW  0
   MOTORDIRECTION1   DW  0
-  ; MOTOR 3
+  ; MOTOR 2 - Y-AXIS
   NEXTTIME2         DW  0
   PREVTIME2			DW  0
   MOTORSPEED2 		DW  0
   MOTORDIRECTION2   DW  0
+  
+  ; POSITION
+  POS_X             DW  0
+  POS_Y             DW  0
+  TARGET_X          DW  0
+  TARGET_Y          DW  0
   
   
 
@@ -49,6 +55,7 @@
 @INCLUDE "buttonhandler.asm"
 @INCLUDE "displaydriver.asm"
 @INCLUDE "scannerhandler.asm"
+@INCLUDE "positionhandler.asm"
   
 @CODE
 begin :          BRA  main         ;  skip subroutine Hex7Seg
@@ -94,7 +101,7 @@ main:		    LOAD  R5  IOAREA                ; R5 will store the start of the IOAR
                 STOR  R0  [GB+MOTORDIRECTION0]
                 STOR  R0  [GB+MOTORDIRECTION1]
                 STOR  R0  [GB+MOTORDIRECTION2]
-				LOAD  R0  75
+				LOAD  R0  40
 				STOR  R0  [GB+MOTORSPEED1]
 				LOAD  R0  0
 				STOR  R0  [GB+MOTORDIRECTION1]
@@ -109,6 +116,7 @@ main_loop:       BRS  poll_inputs
                 STOR  R0  [GB+MOTORSPEED0]
                 STOR  R0  [GB+MOTORSPEED2]
                 
+                 BRS  check_pos
     			 BRS  drive_motors1
                  
 				 
