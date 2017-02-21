@@ -87,11 +87,8 @@ main_loop:       BRS  poll_inputs
 				LOAD  R0  [GB+ANALOG0]
 				MULS  R0  100
 				 DIV  R0  255
-				;BRS  display_decimal_number
+				BRS  display_decimal_number
                 STOR  R0  [GB+MOTORSPEED0]
-				 ;ADD  R0  30
-                ;STOR  R0  [GB+MOTORSPEED1]
-				ADD  R0  50
                 STOR  R0  [GB+MOTORSPEED2]
                 
     			 BRS  drive_motors1

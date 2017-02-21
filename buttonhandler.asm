@@ -68,16 +68,31 @@ r_handle_btns:
 ;---------------------------------------------------------------------------------;	
 			  
 button_0_toggled:
+            PUSH  R0
+            LOAD  R0  [GB+MOTORDIRECTION0]
+             BRS  toggle_dir
+            STOR  R0  [GB+MOTORDIRECTION0]
+            PULL  R0
 			 RTS
 			
 ;---------------------------------------------------------------------------------;	
 			  
 button_1_toggled:
+            PUSH  R0
+            LOAD  R0  [GB+MOTORDIRECTION1]
+             BRS  toggle_dir
+            STOR  R0  [GB+MOTORDIRECTION1]
+            PULL  R0
 			 RTS
 
 ;---------------------------------------------------------------------------------;	
 			  
 button_2_toggled:
+            PUSH  R0
+            LOAD  R0  [GB+MOTORDIRECTION2]
+             BRS  toggle_dir
+            STOR  R0  [GB+MOTORDIRECTION2]
+            PULL  R0
 			 RTS
 
 ;---------------------------------------------------------------------------------;	
@@ -107,5 +122,15 @@ button_6_toggled:
 ;---------------------------------------------------------------------------------;	
 			  
 button_7_toggled:
-			 RTS			 
+			 RTS	
+;---------------------------------------------------------------------------------;
+;INPUT: R0 containing current direction. 
+;OUTPUT: R0 containing toggled direction.
+;---------------------------------------------------------------------------------;
+toggle_dir:   CMP  R0 0
+              BLE  dir_add
+             LOAD  R0 -1
+              RTS
+dir_add:      ADD  R0 1             
+              RTS             
 @END              
