@@ -116,12 +116,24 @@ button_5_toggled:
 
 ;---------------------------------------------------------------------------------;	
 			  
+;This is the button that is attatched to motor0 (x-axis);
 button_6_toggled:
+			PUSH  R0						
+			LOAD  R0  [GB+POS_X]
+			 ADD  R0  [GB+MOTORDIRECTION0]
+			STOR  R0  [GB+POS_X]
+			PULL  R0
 			 RTS
 
 ;---------------------------------------------------------------------------------;	
-			  
+
+;This is the button that is attatched to motor2 (y-axis);			  
 button_7_toggled:
+			PUSH  R0
+			LOAD  R0  [GB+POS_Y]
+			 ADD  R0  [GB+MOTORDIRECTION2]
+			STOR  R0  [GB+POS_Y]
+			PULL  R0
 			 RTS	
 ;---------------------------------------------------------------------------------;
 ;INPUT: R0 containing current direction. 
