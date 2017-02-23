@@ -38,8 +38,8 @@
   ; POSITION
   POS_X             DW  0
   POS_Y             DW  0
-  TARGET_X          DW  0
-  TARGET_Y          DW  0
+  TARGET_X          DW  2
+  TARGET_Y          DW  2
   
   
 
@@ -97,14 +97,13 @@ main:		    LOAD  R5  IOAREA                ; R5 will store the start of the IOAR
                 STOR  R0  [GB+NEXTTIME1]
                 STOR  R0  [GB+NEXTTIME2]
 				STOR  R0  [GB+MOTORPREVTIME]
-                LOAD  R0  1
+                LOAD  R0  0
                 STOR  R0  [GB+MOTORDIRECTION0]
                 STOR  R0  [GB+MOTORDIRECTION1]
                 STOR  R0  [GB+MOTORDIRECTION2]
 				LOAD  R0  40
 				STOR  R0  [GB+MOTORSPEED1]
-				LOAD  R0  0
-				STOR  R0  [GB+MOTORDIRECTION1]
+                
                 
 main_loop:       BRS  poll_inputs     
 				 BRS  handle_btns

@@ -53,8 +53,8 @@ btn6tgl:	 LOAD  R1  R0				; check button 6 for toggle
 			  BRS  button_6_toggled			  			  
 
 btn7tgl:	 LOAD  R1  R0				; check button 7 for toggle
-			  AND  R1  %0100000
-			  CMP  R1  %0100000
+			  AND  R1  %010000000
+			  CMP  R1  %010000000
 			  BNE  r_handle_btns
 			  BRS  button_7_toggled			  			  
 			
@@ -88,22 +88,34 @@ button_1_toggled:
 ;---------------------------------------------------------------------------------;	
 			  
 button_2_toggled:
-            PUSH  R0
-            LOAD  R0  [GB+MOTORDIRECTION2]
-             BRS  toggle_dir
-            STOR  R0  [GB+MOTORDIRECTION2]
-            PULL  R0
+             BRS  place_disk
+;            PUSH  R0
+;            LOAD  R0  [GB+MOTORDIRECTION2]
+;             BRS  toggle_dir
+;            STOR  R0  [GB+MOTORDIRECTION2]
+;            PULL  R0
 			 RTS
 
 ;---------------------------------------------------------------------------------;	
 			  
 button_3_toggled:
+            PUSH  R0
+            LOAD  R0  [GB+TARGET_X]
+             ADD  R0  1
+             MOD  R0  3
+            STOR  R0  [GB+TARGET_X]
+            PULL  R0
 			 RTS
 
 ;---------------------------------------------------------------------------------;	
 			  
 button_4_toggled:
-			 BRS  place_disk
+            PUSH  R0
+            LOAD  R0  [GB+TARGET_Y]
+             ADD  R0  1
+             MOD  R0  3
+            STOR  R0  [GB+TARGET_Y]
+            PULL  R0
 			 RTS
 ;---------------------------------------------------------------------------------;	
 			  
