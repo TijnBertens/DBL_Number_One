@@ -40,8 +40,6 @@
   POS_Y             DW  0
   TARGET_X          DW  2
   TARGET_Y          DW  2
-  
-  
 
    IOAREA      EQU  -16  ;  address of the I/O-Area, modulo 2^18
     INPUT      EQU    7  ;  position of the input buttons (relative to IOAREA)
@@ -88,6 +86,41 @@ Hex7Seg_bgn:     AND  R1  %01111   ;  R0 := R0 MOD 16 , just to be safe...
                 LOAD  R2  [SP++]   ;  R1 := address(tbl) (retrieve from stack)
                 LOAD  R2  [R2+R1]  ;  R1 := tbl[R0]
                  RTS
+
+;---------------------------------------------------------------------------------;				 				 
+				 
+Alfa7Seg     :  BRS  Alfa7Seg_bgn  ;  push address(tbl) onto stack and proceed at "bgn"
+Alfa7Seg_tbl : CONS  %01110111    ;  7-segment pattern for 'a'
+              CONS  %00011111    ;  7-segment pattern for 'b'
+              CONS  %01001110    ;  7-segment pattern for 'c'
+              CONS  %00111101    ;  7-segment pattern for 'd'
+              CONS  %01001111    ;  7-segment pattern for 'e'
+              CONS  %01000111    ;  7-segment pattern for 'f'
+              CONS  %01111011    ;  7-segment pattern for 'g'
+              CONS  %00010111    ;  7-segment pattern for 'h'
+              CONS  %00110000    ;  7-segment pattern for 'i'
+              CONS  %00111000    ;  7-segment pattern for 'j'
+              CONS  %01010111    ;  7-segment pattern for 'k'
+              CONS  %00001110    ;  7-segment pattern for 'l'
+              CONS  %01010100    ;  7-segment pattern for 'm'
+              CONS  %00010101    ;  7-segment pattern for 'n'
+              CONS  %01111110    ;  7-segment pattern for 'o'
+              CONS  %01100111    ;  7-segment pattern for 'p'
+			  CONS  %01110011    ;  7-segment pattern for 'q'
+              CONS  %01000110    ;  7-segment pattern for 'r'
+              CONS  %01011011    ;  7-segment pattern for 's'
+              CONS  %00001111    ;  7-segment pattern for 't'
+              CONS  %00111110    ;  7-segment pattern for 'u'
+              CONS  %00001110    ;  7-segment pattern for 'v'
+			  CONS  %00101010    ;  7-segment pattern for 'w'
+              CONS  %00110111    ;  7-segment pattern for 'x'
+              CONS  %00111011    ;  7-segment pattern for 'y'
+              CONS  %01101101    ;  7-segment pattern for 'z'
+Alfa7Seg_bgn:  SUB  R0  97
+			   MOD  R0  26   	 ;  R0 := R0 MOD 26 , just to be safe...
+              LOAD  R1  [SP++]   ;  R1 := address(tbl) (retrieve from stack)
+              LOAD  R1  [R1+R0]  ;  R1 := tbl[R0]
+               RTS
 				 
 ;---------------------------------------------------------------------------------;				 				 
 				 
@@ -117,8 +150,7 @@ main_loop:       BRS  poll_inputs
                 
                  BRS  check_pos
     			 BRS  drive_motors1
-                 
-				 
+				
                  BRA  main_loop                      ; Loop back to the start of the loop.
 				 
 ;---------------------------------------------------------------------------------;	
