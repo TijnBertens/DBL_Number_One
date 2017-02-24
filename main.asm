@@ -15,7 +15,7 @@
   OUTPUTSTATE		DW  0
   
   ; COLOR SCANNER
-  SCANNEDCOLOR		DW  0		  ;  0 - white, 1 - background, 2 - blue
+  SCANNEDCOLOR		DW  0		  ;  0 - white, 1 - background, 2 - black
   PREVSCANNEDCOLOR	DW  0
   
   MOTORPREVTIME		DW  0
@@ -27,7 +27,7 @@
   ; MOTOR 1 - EXTRUDOR
   NEXTTIME1         DW  0
   PREVTIME1			DW  0
-  MOTORSPEED1 		DW  0
+  MOTORSPEED1 		DW  75
   MOTORDIRECTION1   DW  0
   ; MOTOR 2 - Y-AXIS
   NEXTTIME2         DW  0
@@ -38,8 +38,8 @@
   ; POSITION
   POS_X             DW  0
   POS_Y             DW  0
-  TARGET_X          DW  2
-  TARGET_Y          DW  2
+  TARGET_X          DW  0
+  TARGET_Y          DW  0
   
   
 
@@ -101,8 +101,6 @@ main:		    LOAD  R5  IOAREA                ; R5 will store the start of the IOAR
                 STOR  R0  [GB+MOTORDIRECTION0]
                 STOR  R0  [GB+MOTORDIRECTION1]
                 STOR  R0  [GB+MOTORDIRECTION2]
-				LOAD  R0  40
-				STOR  R0  [GB+MOTORSPEED1]
                 
                 
 main_loop:       BRS  poll_inputs     
