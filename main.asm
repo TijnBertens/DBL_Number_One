@@ -22,7 +22,7 @@
   ; MOTOR 0 - X-AXIS
   NEXTTIME0         DW  0
   PREVTIME0			DW  0
-  MOTORSPEED0 		DW  0
+  MOTORSPEED0 		DW  80
   MOTORDIRECTION0   DW  0
   ; MOTOR 1 - EXTRUDOR
   NEXTTIME1         DW  0
@@ -32,14 +32,14 @@
   ; MOTOR 2 - Y-AXIS
   NEXTTIME2         DW  0
   PREVTIME2			DW  0
-  MOTORSPEED2 		DW  0
+  MOTORSPEED2 		DW  40
   MOTORDIRECTION2   DW  0
   
   ; POSITION
   POS_X             DW  0
   POS_Y             DW  0
-  TARGET_X          DW  2
-  TARGET_Y          DW  2
+  TARGET_X          DW  0
+  TARGET_Y          DW  0
 
    IOAREA      EQU  -16  ;  address of the I/O-Area, modulo 2^18
     INPUT      EQU    7  ;  position of the input buttons (relative to IOAREA)
@@ -145,8 +145,8 @@ main_loop:       BRS  poll_inputs
 				MULS  R0  100
 				 DIV  R0  255
 				;BRS  display_decimal_number
-                STOR  R0  [GB+MOTORSPEED0]
-                STOR  R0  [GB+MOTORSPEED2]
+                ;STOR  R0  [GB+MOTORSPEED0]
+                ;STOR  R0  [GB+MOTORSPEED2]
                 
                  BRS  check_pos
     			 BRS  drive_motors1
