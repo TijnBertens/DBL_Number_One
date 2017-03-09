@@ -15,7 +15,7 @@
   OUTPUTSTATE		DW  0
   
   ; COLOR SCANNER
-  SCANNEDCOLOR		DW  0		  ;  0 - white, 1 - background, 2 - blue
+  SCANNEDCOLOR		DW  0		  ;  0 - white, 1 - background, 2 - red
   PREVSCANNEDCOLOR	DW  0
   
   MOTORPREVTIME		DW  0
@@ -40,6 +40,9 @@
   POS_Y             DW  0
   TARGET_X          DW  0
   TARGET_Y          DW  0
+  
+  ; Virtual playing field (x + 3y)
+  GRID				DS  9, 0, 0, 0, 0, 0, 0, 0, 0, 0
 
    IOAREA      EQU  -16  ;  address of the I/O-Area, modulo 2^18
     INPUT      EQU    7  ;  position of the input buttons (relative to IOAREA)
@@ -54,6 +57,7 @@
 @INCLUDE "displaydriver.asm"
 @INCLUDE "scannerhandler.asm"
 @INCLUDE "positionhandler.asm"
+@INCLUDE "game.asm"
   
 @CODE
 begin :          BRA  main         ;  skip subroutine Hex7Seg
@@ -75,22 +79,21 @@ main:		    LOAD  R5  IOAREA                ; R5 will store the start of the IOAR
                 STOR  R0  [GB+MOTORDIRECTION1]
                 STOR  R0  [GB+MOTORDIRECTION2]
                 
-main_loop:       BRS  poll_inputs     
-				 BRS  handle_btns
-				 BRS  handle_scanners
-				;LOAD  R0  [GB+ANALOG0]
-				;MULS  R0  100
-				; DIV  R0  255
-                 BRS  display_decimal_number
-                ;STOR  R0  [GB+MOTORSPEED0]
-                ;STOR  R0  [GB+MOTORSPEED2]
-                
-                 BRS  check_pos
-    			 BRS  drive_motors1
+main_loop:       BRS  essential_routines
                 
                  BRA  main_loop                      ; Loop back to the start of the loop.
 				 
 ;---------------------------------------------------------------------------------;	
+
+essential_routines:
+				BRS  poll_inputs     
+				BRS  handle_btns
+				BRS  handle_scanners
+				BRS  display_decimal_number
+				BRS  check_pos
+    			BRS  drive_motors1
+				RTS
+
 poll_inputs:	PUSH  R0
 				PUSH  R1
 				

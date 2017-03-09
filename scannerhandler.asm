@@ -1,5 +1,26 @@
 @CODE
 
+scan_current_position:
+			 PUSH  R0
+			 PUSH  R1	
+			 PUSH  R2
+			 
+			 LOAD  R0  [GB+POS_X]
+			 LOAD  R1  [GB+POS_Y]
+			 
+			 MULS  R1  3
+			  ADD  R0  R1					; R0 := x + 3y
+			  
+			 LOAD  R1  [GB+SCANNEDCOLOR]
+			 LOAD  R2  GB
+			  ADD  R2  GRID					; R2 := GB+GRID
+			 STOR  R1  [R2+R0]				; RAM[GB+GRID+OFFSET] := SCANNEDCOLOR
+			 
+			 PULL  R2
+			 PULL  R1
+			 PULL  R0
+			  RTS
+
 handle_scanners:
              PUSH  R0
 			 PUSH  R1
