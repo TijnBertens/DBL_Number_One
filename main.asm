@@ -42,7 +42,7 @@
   TARGET_Y          DW  0
   
   ; Virtual playing field (x + 3y)
-  GRID				DS  9, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  GRID				DS  10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 
    IOAREA      EQU  -16  ;  address of the I/O-Area, modulo 2^18
     INPUT      EQU    7  ;  position of the input buttons (relative to IOAREA)

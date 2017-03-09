@@ -39,4 +39,38 @@ y_positive:     LOAD  R0  1                         ; Move the motor in positive
 check_pos_r:    PULL  R1
                 PULL  R0
                  RTS
+				
+;---------------------------------------------------------------------------------;				 				 
+; INPUT: RO = x; R1 = y
+				
+move_to_pos:
+				PUSH R0
+				PUSH R1
+				PUSH R2
+				PUSH R3
+	
+move_while_begin:
+				 BRS essential_routines
+				
+				STOR R0  [GB+TARGET_X]
+				STOR R1  [GB+TARGET_Y]
+				
+				LOAD R2  [GB+POS_X]
+				LOAD R3  [GB+POS_Y]
+				
+				 CMP R2  R0					;if(x != tarx || y != tarY) => wait
+				 BNE move_while_begin
+				 CMP R3  R1
+				 BNE move_while_begin
+				
+				PULL R3
+				PULL R2
+				PULL R1
+				PULL R0
+				 RTS
+
+;---------------------------------------------------------------------------------;				 				 
+
+scan_grid:		PUSH  R0				 
 @END
+
