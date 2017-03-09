@@ -60,67 +60,7 @@ begin :          BRA  main         ;  skip subroutine Hex7Seg
 
 
 ;  
-;      Routine Hex7Seg maps a number in the range [0..15] to its hexadecimal
-;      representation pattern for the 7-segment display.
-;      R1 : upon entry, contains the number
-;      R2 : upon exit,  contains the resulting pattern
-;
-Hex7Seg     :    BRS  Hex7Seg_bgn  ;  push address(tbl) onto stack and proceed at "bgn"
-Hex7Seg_tbl :   CONS  %01111110    ;  7-segment pattern for '0'
-                CONS  %00110000    ;  7-segment pattern for '1'
-                CONS  %01101101    ;  7-segment pattern for '2'
-                CONS  %01111001    ;  7-segment pattern for '3'
-                CONS  %00110011    ;  7-segment pattern for '4'
-                CONS  %01011011    ;  7-segment pattern for '5'
-                CONS  %01011111    ;  7-segment pattern for '6'
-                CONS  %01110000    ;  7-segment pattern for '7'
-                CONS  %01111111    ;  7-segment pattern for '8'
-                CONS  %01111011    ;  7-segment pattern for '9'
-                CONS  %01110111    ;  7-segment pattern for 'A'
-                CONS  %00011111    ;  7-segment pattern for 'b'
-                CONS  %01001110    ;  7-segment pattern for 'C'
-                CONS  %00111101    ;  7-segment pattern for 'd'
-                CONS  %01001111    ;  7-segment pattern for 'E'
-                CONS  %01000111    ;  7-segment pattern for 'F'
-Hex7Seg_bgn:     AND  R1  %01111   ;  R0 := R0 MOD 16 , just to be safe...
-                LOAD  R2  [SP++]   ;  R1 := address(tbl) (retrieve from stack)
-                LOAD  R2  [R2+R1]  ;  R1 := tbl[R0]
-                 RTS
-
-;---------------------------------------------------------------------------------;				 				 
-				 
-Alfa7Seg     :  BRS  Alfa7Seg_bgn  ;  push address(tbl) onto stack and proceed at "bgn"
-Alfa7Seg_tbl : CONS  %01110111    ;  7-segment pattern for 'a'
-              CONS  %00011111    ;  7-segment pattern for 'b'
-              CONS  %01001110    ;  7-segment pattern for 'c'
-              CONS  %00111101    ;  7-segment pattern for 'd'
-              CONS  %01001111    ;  7-segment pattern for 'e'
-              CONS  %01000111    ;  7-segment pattern for 'f'
-              CONS  %01111011    ;  7-segment pattern for 'g'
-              CONS  %00010111    ;  7-segment pattern for 'h'
-              CONS  %00110000    ;  7-segment pattern for 'i'
-              CONS  %00111000    ;  7-segment pattern for 'j'
-              CONS  %01010111    ;  7-segment pattern for 'k'
-              CONS  %00001110    ;  7-segment pattern for 'l'
-              CONS  %01010100    ;  7-segment pattern for 'm'
-              CONS  %00010101    ;  7-segment pattern for 'n'
-              CONS  %01111110    ;  7-segment pattern for 'o'
-              CONS  %01100111    ;  7-segment pattern for 'p'
-			  CONS  %01110011    ;  7-segment pattern for 'q'
-              CONS  %01000110    ;  7-segment pattern for 'r'
-              CONS  %01011011    ;  7-segment pattern for 's'
-              CONS  %00001111    ;  7-segment pattern for 't'
-              CONS  %00111110    ;  7-segment pattern for 'u'
-              CONS  %00001110    ;  7-segment pattern for 'v'
-			  CONS  %00101010    ;  7-segment pattern for 'w'
-              CONS  %00110111    ;  7-segment pattern for 'x'
-              CONS  %00111011    ;  7-segment pattern for 'y'
-              CONS  %01101101    ;  7-segment pattern for 'z'
-Alfa7Seg_bgn:  SUB  R0  97
-			   MOD  R0  26   	 ;  R0 := R0 MOD 26 , just to be safe...
-              LOAD  R1  [SP++]   ;  R1 := address(tbl) (retrieve from stack)
-              LOAD  R1  [R1+R0]  ;  R1 := tbl[R0]
-               RTS
+;     
 				 
 ;---------------------------------------------------------------------------------;				 				 
 				 
