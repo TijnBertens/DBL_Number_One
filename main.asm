@@ -27,12 +27,12 @@
   ; MOTOR 1 - EXTRUDOR
   NEXTTIME1         DW  0
   PREVTIME1			DW  0
-  MOTORSPEED1 		DW  0
+  MOTORSPEED1 		DW  80
   MOTORDIRECTION1   DW  0
   ; MOTOR 2 - Y-AXIS
   NEXTTIME2         DW  0
   PREVTIME2			DW  0
-  MOTORSPEED2 		DW  40
+  MOTORSPEED2 		DW  45
   MOTORDIRECTION2   DW  0
   
   ; POSITION
@@ -134,23 +134,20 @@ main:		    LOAD  R5  IOAREA                ; R5 will store the start of the IOAR
                 STOR  R0  [GB+MOTORDIRECTION0]
                 STOR  R0  [GB+MOTORDIRECTION1]
                 STOR  R0  [GB+MOTORDIRECTION2]
-				LOAD  R0  40
-				STOR  R0  [GB+MOTORSPEED1]
-                
                 
 main_loop:       BRS  poll_inputs     
 				 BRS  handle_btns
 				 BRS  handle_scanners
-				LOAD  R0  [GB+ANALOG0]
-				MULS  R0  100
-				 DIV  R0  255
-				;BRS  display_decimal_number
+				;LOAD  R0  [GB+ANALOG0]
+				;MULS  R0  100
+				; DIV  R0  255
+                 BRS  display_decimal_number
                 ;STOR  R0  [GB+MOTORSPEED0]
                 ;STOR  R0  [GB+MOTORSPEED2]
                 
                  BRS  check_pos
     			 BRS  drive_motors1
-				
+                
                  BRA  main_loop                      ; Loop back to the start of the loop.
 				 
 ;---------------------------------------------------------------------------------;	
