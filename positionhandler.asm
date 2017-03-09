@@ -71,6 +71,63 @@ move_while_begin:
 
 ;---------------------------------------------------------------------------------;				 				 
 
-scan_grid:		PUSH  R0				 
+scan_grid:		PUSH  R0
+				PUSH  R1
+				
+				LOAD  R0  2
+				LOAD  R1  2
+				 BRS  move_to_pos
+				 BRS  scan_current_position
+				 
+				LOAD  R0  1
+				LOAD  R1  2
+				 BRS  move_to_pos
+				 BRS  scan_current_position
+				 
+				LOAD  R0  0
+				LOAD  R1  2
+				 BRS  move_to_pos
+				 BRS  scan_current_position
+				
+				LOAD  R0  0
+				LOAD  R1  1
+				 BRS  move_to_pos
+				 BRS  scan_current_position
+				
+				LOAD  R0  0
+				LOAD  R1  0
+				 BRS  move_to_pos
+				 BRS  scan_current_position
+				
+				LOAD  R0  1
+				LOAD  R1  0
+				 BRS  move_to_pos
+				 BRS  scan_current_position
+				
+				LOAD  R0  2
+				LOAD  R1  0
+				 BRS  move_to_pos
+				 BRS  scan_current_position
+				
+				LOAD  R0  2
+				LOAD  R1  1
+				 BRS  move_to_pos
+				 BRS  scan_current_position
+				
+				LOAD  R0  1
+				LOAD  R1  1
+				 BRS  move_to_pos
+				 BRS  scan_current_position
+				
+				LOAD  R0  3
+				LOAD  R1  2
+				 BRS  move_to_pos
+				 BRS  scan_current_position
+				 
+				
+				PULL  R1
+				PULL  R0
+				 RTS
 @END
+
 
