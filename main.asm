@@ -43,6 +43,10 @@
   
   ; Virtual playing field (x + 3y)
   GRID				DS  10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  
+  ; DISPLAY
+  DSP_DEC           DW  -1                  ; The decimal value to display, set negative to display ascii instead (next lines).
+  DSP_ASCII         DW  'ab', 'cd', 'ef'    ; The ascii value to display in 3 words, 2 characters each.
 
    IOAREA      EQU  -16  ;  address of the I/O-Area, modulo 2^18
     INPUT      EQU    7  ;  position of the input buttons (relative to IOAREA)
