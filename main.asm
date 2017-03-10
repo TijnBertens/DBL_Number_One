@@ -42,7 +42,7 @@
   TARGET_Y          DW  0
   
   ; Virtual playing field (x + 3y)
-  GRID				DS  10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  GRID				DS  10;, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
   
   ; DISPLAY
   DSP_DEC           DW  -1                  ; The decimal value to display, set negative to display ascii instead (next lines).
@@ -61,7 +61,7 @@
 @INCLUDE "displaydriver.asm"
 @INCLUDE "scannerhandler.asm"
 @INCLUDE "positionhandler.asm"
-@INCLUDE "game.asm"
+;@INCLUDE "game.asm"
   
 @CODE
 begin :          BRA  main         ;  skip subroutine Hex7Seg
@@ -93,7 +93,7 @@ essential_routines:
 				BRS  poll_inputs     
 				BRS  handle_btns
 				BRS  handle_scanners
-				BRS  display_decimal_number
+				BRS  update_display
 				BRS  check_pos
     			BRS  drive_motors1
 				RTS

@@ -49,7 +49,7 @@ st_bg:		 LOAD  R1  1						; ANALOG0 > 50 && ANALOG0 < 200
 chk_scn_chg: LOAD  R0  R1						; DEBUG:
 			 MULS  R0  10000					; display ANALOG0 and scannedcolor
 			  ADD  R0  [GB+ANALOG0]				; on the display
-			  BRS  display_decimal_number
+			  ;BRS  display_decimal_number
 			  
 			 LOAD  R0  [GB+PREVSCANNEDCOLOR]	; if new color != prevcolor
 			  CMP  R0  R1						; call "scanned_color_changed"

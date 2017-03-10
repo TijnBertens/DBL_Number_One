@@ -88,7 +88,8 @@ button_1_toggled:
 ;---------------------------------------------------------------------------------;	
 			  
 button_2_toggled:
-             BRS  place_disk
+             ;BRS  place_disk
+             BRS scan_grid
 ;            PUSH  R0
 ;            LOAD  R0  [GB+MOTORDIRECTION2]
 ;             BRS  toggle_dir
