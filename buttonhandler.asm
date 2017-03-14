@@ -69,8 +69,9 @@ r_handle_btns:
 			  
 button_0_toggled:
             PUSH  R0
-            LOAD  R0  0
+            LOAD  R0  3
             STOR  R0  [GB+TARGET_X]
+            LOAD  R0  2
             STOR  R0  [GB+TARGET_Y]
             PULL  R0
 			 RTS
@@ -102,7 +103,8 @@ button_3_toggled:
             LOAD  R0  %10000000
             STOR  R0  [R5+OUTPUT]
             STOR  R0  [GB+OUTPUTSTATE]
-pause_while: LOAD  R0  [R5+INPUT]
+pause_while: BRS  update_display 
+            LOAD  R0  [R5+INPUT]
 			 AND  R0  %01000
 			 CMP  R0  %01000
 			 BEQ  pause_while
@@ -113,10 +115,10 @@ pause_while: LOAD  R0  [R5+INPUT]
 			  
 button_4_toggled:
             PUSH  R0
-            LOAD  R0  [GB+TARGET_Y]
-             ADD  R0  1
-             MOD  R0  3
-            STOR  R0  [GB+TARGET_Y]
+            
+             BRS  scan_grid
+             BRS  do_next_move
+            
             PULL  R0
 			 RTS
 ;---------------------------------------------------------------------------------;	

@@ -83,6 +83,7 @@ place_disk_while:
                  BRS  essential_routines
                 LOAD  R0  [GB+MOTORDIRECTION1]
                  BNE  place_disk_while
+                 BRS  sleep
                 
 				PULL  R0
 				RTS

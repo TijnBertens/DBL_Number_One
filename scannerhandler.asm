@@ -13,8 +13,8 @@ scan_current_position:
 			  
 			 LOAD  R1  [GB+SCANNEDCOLOR]
              LOAD  R2  [GB+ANALOG0]
-             MULS  R1  1000
-              ADD  R1  R2
+             ;MULS  R1  1000
+              ;ADD  R1  R2
 			 LOAD  R2  GB
 			  ADD  R2  GRID					; R2 := GB+GRID
 			 STOR  R1  [R2+R0]				; RAM[GB+GRID+OFFSET] := SCANNEDCOLOR

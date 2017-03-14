@@ -31,7 +31,11 @@ Hex7Seg_norm:    AND  R1  %01111   ;  R0 := R0 MOD 16 , just to be safe...
 
 ;---------------------------------------------------------------------------------;				 				 
 				 
-Alfa7Seg:      CMP  R1 96
+Alfa7Seg:      CMP  R1  32
+               BNE  Alfa7Seg_ns
+              LOAD  R2  0
+               RTS
+Alfa7Seg_ns:   CMP  R1 96
                BLE  Hex7Seg
                BRS  Alfa7Seg_bgn  ;  push address(tbl) onto stack and proceed at "bgn"
 Alfa7Seg_tbl: CONS  %01110111    ;  7-segment pattern for 'a'

@@ -78,90 +78,120 @@ scan_grid:		PUSH  R0
 				LOAD  R0  2
 				LOAD  R1  2
 				 BRS  move_to_pos
-                 BRS  place_disk
-                 BRS  sleep
-				 BRS  scan_current_position
+                 ;BRS  place_disk
+                 ;BRS sleep
+                PUSH  R0
+                LOAD  R0  2500 
+                BRS  sleep_i		
+                PULL  R0
+                 BRS  scan_current_position
                  BRS  color_dsp
-                 BRS  sleep
-				 
-				LOAD  R0  1
-				LOAD  R1  2
-				 BRS  move_to_pos
-                 BRS  place_disk
-                 BRS  sleep
-				 BRS  scan_current_position
-                 BRS  color_dsp
-                 BRS  sleep
-				 
-				LOAD  R0  0
-				LOAD  R1  2
-				 BRS  move_to_pos
-                 BRS  place_disk
-                 BRS  sleep
-				 BRS  scan_current_position
-                 BRS  color_dsp
-                 BRS  sleep
-				
-				LOAD  R0  0
-				LOAD  R1  1
-				 BRS  move_to_pos
-                 BRS  place_disk
-                 BRS  sleep
-				 BRS  scan_current_position
-                 BRS  color_dsp
-                 BRS  sleep
-				
-				LOAD  R0  0
-				LOAD  R1  0
-				 BRS  move_to_pos
-                 BRS  place_disk
-                 BRS  sleep
-				 BRS  scan_current_position
-                 BRS  color_dsp
-                 BRS  sleep
-				
-				LOAD  R0  1
-				LOAD  R1  0
-				 BRS  move_to_pos
-                 BRS  place_disk
-                 BRS  sleep
-				 BRS  scan_current_position
-                 BRS  color_dsp
-                 BRS  sleep
-				
-				LOAD  R0  2
-				LOAD  R1  0
-				 BRS  move_to_pos
-                 BRS  place_disk
-                 BRS  sleep
-				 BRS  scan_current_position
-                 BRS  color_dsp
-                 BRS  sleep
-				
-				LOAD  R0  2
-				LOAD  R1  1
-				 BRS  move_to_pos
-                 BRS  place_disk
-                 BRS  sleep
-				 BRS  scan_current_position
-                 BRS  color_dsp
-                 BRS  sleep
-				
-				LOAD  R0  1
-				LOAD  R1  1
-				 BRS  move_to_pos
-                 BRS  place_disk
-                 BRS  sleep
-				 BRS  scan_current_position
-                 BRS  color_dsp
-				 BRS  sleep
                 
-				LOAD  R0  3
+                 ;BRS  sleep
+				 
+				LOAD  R0  1
 				LOAD  R1  2
 				 BRS  move_to_pos
+                PUSH  R0
+                LOAD  R0  2500 
+                BRS  sleep_i		
+                PULL  R0
+                  
+                 ;BRS sleep
 				 BRS  scan_current_position
                  BRS  color_dsp
+                 ;BRS  sleep
 				 
+				LOAD  R0  0
+				LOAD  R1  2
+				 BRS  move_to_pos
+                 PUSH  R0
+                LOAD  R0  2500 
+                BRS  sleep_i		
+                PULL  R0
+                  
+                 ;BRS sleep
+				 BRS  scan_current_position
+                 BRS  color_dsp
+                 ;BRS  sleep
+				
+				LOAD  R0  0
+				LOAD  R1  1
+				 BRS  move_to_pos
+                 PUSH  R0
+                LOAD  R0  2500 
+                BRS  sleep_i		
+                PULL  R0
+                  
+                 ;BRS sleep
+				 BRS  scan_current_position
+                 BRS  color_dsp
+                ; BRS  sleep
+				
+				LOAD  R0  0
+				LOAD  R1  0
+				 BRS  move_to_pos
+                 PUSH  R0
+                LOAD  R0  2500 
+                BRS  sleep_i		
+                PULL  R0
+                  
+                 ;BRS sleep
+				 BRS  scan_current_position
+                 BRS  color_dsp
+                 ;BRS  sleep
+				
+				LOAD  R0  1
+				LOAD  R1  0
+				 BRS  move_to_pos
+                 PUSH  R0
+                LOAD  R0  2500 
+                BRS  sleep_i		
+                PULL  R0
+                  
+                 ;BRS sleep
+				 BRS  scan_current_position
+                 BRS  color_dsp
+                 ;BRS  sleep
+				
+				LOAD  R0  2
+				LOAD  R1  0
+				 BRS  move_to_pos
+                 PUSH  R0
+                LOAD  R0  2500 
+                BRS  sleep_i		
+                PULL  R0
+                  
+                 ;BRS sleep
+				 BRS  scan_current_position
+                 BRS  color_dsp
+                 ;BRS  sleep
+				
+				LOAD  R0  2
+				LOAD  R1  1
+				 BRS  move_to_pos
+                 PUSH  R0
+                LOAD  R0  2500 
+                BRS  sleep_i		
+                PULL  R0
+                  
+                 ;BRS sleep
+				 BRS  scan_current_position
+                 BRS  color_dsp
+                 ;BRS  sleep
+				
+				LOAD  R0  1
+				LOAD  R1  1
+				 BRS  move_to_pos
+                 PUSH  R0
+                LOAD  R0  2500 
+                BRS  sleep_i		
+                PULL  R0
+                  
+                 ;BRS sleep
+				 BRS  scan_current_position
+                 BRS  color_dsp
+				 ;BRS  sleep
 				
                 PULL  R2
 				PULL  R1

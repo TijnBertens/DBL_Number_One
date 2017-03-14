@@ -27,7 +27,7 @@
   ; MOTOR 1 - EXTRUDOR
   NEXTTIME1         DW  0
   PREVTIME1			DW  0
-  MOTORSPEED1 		DW  65
+  MOTORSPEED1 		DW  75
   MOTORDIRECTION1   DW  0
   ; MOTOR 2 - Y-AXIS
   NEXTTIME2         DW  0
@@ -36,17 +36,21 @@
   MOTORDIRECTION2   DW  0
   
   ; POSITION
-  POS_X             DW  0
-  POS_Y             DW  0
-  TARGET_X          DW  0
-  TARGET_Y          DW  0
+  POS_X             DW  3
+  POS_Y             DW  2
+  TARGET_X          DW  3
+  TARGET_Y          DW  2
   
   ; Virtual playing field (x + 3y)
   GRID				DS  10;, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+ 
+  ; BOARD STATE:  00 = wildcard, 01 = background, 10 = unwanted, 11 = wanted
+  ; Fork diagnal 0
+  FORK_DIAG0        DW  %010111010000110000, 0
   
   ; DISPLAY
   DSP_DEC           DW  -1                  ; The decimal value to display, set negative to display ascii instead (next lines).
-  DSP_ASCII         DW  'ab', 'cd', 'ef'    ; The ascii value to display in 3 words, 2 characters each.
+  DSP_ASCII         DW  'a ', ' d', '  '    ; The ascii value to display in 3 words, 2 characters each.
 
    IOAREA      EQU  -16  ;  address of the I/O-Area, modulo 2^18
     INPUT      EQU    7  ;  position of the input buttons (relative to IOAREA)
@@ -61,7 +65,7 @@
 @INCLUDE "displaydriver.asm"
 @INCLUDE "scannerhandler.asm"
 @INCLUDE "positionhandler.asm"
-;@INCLUDE "game.asm"
+@INCLUDE "game.asm"
   
 @CODE
 begin :          BRA  main         ;  skip subroutine Hex7Seg
@@ -83,13 +87,13 @@ main:		    LOAD  R5  IOAREA                ; R5 will store the start of the IOAR
                 LOAD  R0  0
                 
 main_loop:       BRS  essential_routines
-                 BRS  scan_grid
-                 ADD  R0  1
-                LOAD  R2  R0
-                MULS  R2  10000
-                LOAD  R1  [GB+DSP_DEC]
-                 ADD  R1  R2
-                STOR  R1  [GB+DSP_DEC]
+                 ;BRS  scan_grid
+                 ;ADD  R0  1
+                ;LOAD  R2  R0
+                ;MULS  R2  10000
+                ;LOAD  R1  [GB+DSP_DEC]
+                 ;;ADD  R1  R2
+                ;STOR  R1  [GB+DSP_DEC]
                  BRA  main_loop                      ; Loop back to the start of the loop.
 				 
 ;---------------------------------------------------------------------------------;	
@@ -130,6 +134,7 @@ poll_inputs:	PUSH  R0
 ;---------------------------------------------------------------------------------;					
 sleep:		 PUSH  R0				; save registers
 			 PUSH  R1
+             
              LOAD  R0  %10000000
              STOR  R0  [R5+OUTPUT]
              STOR  R0  [GB+OUTPUTSTATE]
@@ -137,9 +142,29 @@ sleep:		 PUSH  R0				; save registers
 d_w:		 LOAD  R1  [R5+TIMER]
              BRS  update_display			 
              SUB  R1  R0
-			  CMP  R1  -2500
+			  CMP  R1  -10000
 			  BGE  d_w
 			 PULL  R1				; restore registers
 			 PULL  R0
-			  RTS				
+			  RTS			
+;---------------------------------------------------------------------------------;					
+sleep_i:	 PUSH  R0
+             PUSH  R1				; save registers
+			 PUSH  R2
+             
+             MULS  R0  -1
+             LOAD  R1  %10000000
+             STOR  R1  [R5+OUTPUT]
+             STOR  R1  [GB+OUTPUTSTATE]
+			 LOAD  R1  [R5+TIMER]
+d_w_i:		 LOAD  R2  [R5+TIMER]
+              BRS  update_display			 
+              SUB  R2  R1
+			  CMP  R2  R0
+			  BGE  d_w_i
+
+             PULL  R2				; restore registers
+			 PULL  R1
+             PULL  R0
+			  RTS			              
 @END              
