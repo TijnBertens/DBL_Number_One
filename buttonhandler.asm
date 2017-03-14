@@ -69,9 +69,9 @@ r_handle_btns:
 			  
 button_0_toggled:
             PUSH  R0
-            LOAD  R0  [GB+MOTORDIRECTION0]
-             BRS  toggle_dir
-            STOR  R0  [GB+MOTORDIRECTION0]
+            LOAD  R0  0
+            STOR  R0  [GB+TARGET_X]
+            STOR  R0  [GB+TARGET_Y]
             PULL  R0
 			 RTS
 			
@@ -79,9 +79,7 @@ button_0_toggled:
 			  
 button_1_toggled:
             PUSH  R0
-            LOAD  R0  [GB+MOTORDIRECTION1]
-             BRS  toggle_dir
-            STOR  R0  [GB+MOTORDIRECTION1]
+             BRS  place_disk
             PULL  R0
 			 RTS
 

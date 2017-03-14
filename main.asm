@@ -15,7 +15,7 @@
   OUTPUTSTATE		DW  0
   
   ; COLOR SCANNER
-  SCANNEDCOLOR		DW  0		  ;  0 - white, 1 - background, 2 - red
+  SCANNEDCOLOR		DW  0		  ;  0 - white, 1 - background, 2 - black
   PREVSCANNEDCOLOR	DW  0
   
   MOTORPREVTIME		DW  0
@@ -27,7 +27,7 @@
   ; MOTOR 1 - EXTRUDOR
   NEXTTIME1         DW  0
   PREVTIME1			DW  0
-  MOTORSPEED1 		DW  80
+  MOTORSPEED1 		DW  65
   MOTORDIRECTION1   DW  0
   ; MOTOR 2 - Y-AXIS
   NEXTTIME2         DW  0
@@ -78,13 +78,18 @@ main:		    LOAD  R5  IOAREA                ; R5 will store the start of the IOAR
                 STOR  R0  [GB+NEXTTIME1]
                 STOR  R0  [GB+NEXTTIME2]
 				STOR  R0  [GB+MOTORPREVTIME]
+                LOAD  R0  %010000000
+                STOR  R0  [GB+OUTPUTSTATE]
                 LOAD  R0  0
-                STOR  R0  [GB+MOTORDIRECTION0]
-                STOR  R0  [GB+MOTORDIRECTION1]
-                STOR  R0  [GB+MOTORDIRECTION2]
                 
 main_loop:       BRS  essential_routines
-                
+                 BRS  scan_grid
+                 ADD  R0  1
+                LOAD  R2  R0
+                MULS  R2  10000
+                LOAD  R1  [GB+DSP_DEC]
+                 ADD  R1  R2
+                STOR  R1  [GB+DSP_DEC]
                  BRA  main_loop                      ; Loop back to the start of the loop.
 				 
 ;---------------------------------------------------------------------------------;	
@@ -125,10 +130,14 @@ poll_inputs:	PUSH  R0
 ;---------------------------------------------------------------------------------;					
 sleep:		 PUSH  R0				; save registers
 			 PUSH  R1
+             LOAD  R0  %10000000
+             STOR  R0  [R5+OUTPUT]
+             STOR  R0  [GB+OUTPUTSTATE]
 			 LOAD  R0  [R5+TIMER]
 d_w:		 LOAD  R1  [R5+TIMER]
-			  SUB  R1  R0
-			  CMP  R1  -10
+             BRS  update_display			 
+             SUB  R1  R0
+			  CMP  R1  -2500
 			  BGE  d_w
 			 PULL  R1				; restore registers
 			 PULL  R0

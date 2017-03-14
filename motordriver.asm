@@ -76,8 +76,14 @@ r_drive_motors1: LOAD  R0  [GB+OUTPUTSTATE]
 ;---------------------------------------------------------------------------------;	
 
 place_disk:     PUSH  R0
-				LOAD  R0  1						; set the motordirection to 1
+                
+place_disk_while:				
+                LOAD  R0  1						; set the motordirection to 1
 				STOR  R0  [GB+MOTORDIRECTION1]	; on the disc placer motor (motor 1)			 
+                 BRS  essential_routines
+                LOAD  R0  [GB+MOTORDIRECTION1]
+                 BNE  place_disk_while
+                
 				PULL  R0
 				RTS
 @END                

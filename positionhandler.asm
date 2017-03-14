@@ -73,61 +73,109 @@ move_while_begin:
 
 scan_grid:		PUSH  R0
 				PUSH  R1
-				
+				PUSH  R2
+                
 				LOAD  R0  2
 				LOAD  R1  2
 				 BRS  move_to_pos
+                 BRS  place_disk
+                 BRS  sleep
 				 BRS  scan_current_position
+                 BRS  color_dsp
+                 BRS  sleep
 				 
 				LOAD  R0  1
 				LOAD  R1  2
 				 BRS  move_to_pos
+                 BRS  place_disk
+                 BRS  sleep
 				 BRS  scan_current_position
+                 BRS  color_dsp
+                 BRS  sleep
 				 
 				LOAD  R0  0
 				LOAD  R1  2
 				 BRS  move_to_pos
+                 BRS  place_disk
+                 BRS  sleep
 				 BRS  scan_current_position
+                 BRS  color_dsp
+                 BRS  sleep
 				
 				LOAD  R0  0
 				LOAD  R1  1
 				 BRS  move_to_pos
+                 BRS  place_disk
+                 BRS  sleep
 				 BRS  scan_current_position
+                 BRS  color_dsp
+                 BRS  sleep
 				
 				LOAD  R0  0
 				LOAD  R1  0
 				 BRS  move_to_pos
+                 BRS  place_disk
+                 BRS  sleep
 				 BRS  scan_current_position
+                 BRS  color_dsp
+                 BRS  sleep
 				
 				LOAD  R0  1
 				LOAD  R1  0
 				 BRS  move_to_pos
+                 BRS  place_disk
+                 BRS  sleep
 				 BRS  scan_current_position
+                 BRS  color_dsp
+                 BRS  sleep
 				
 				LOAD  R0  2
 				LOAD  R1  0
 				 BRS  move_to_pos
+                 BRS  place_disk
+                 BRS  sleep
 				 BRS  scan_current_position
+                 BRS  color_dsp
+                 BRS  sleep
 				
 				LOAD  R0  2
 				LOAD  R1  1
 				 BRS  move_to_pos
+                 BRS  place_disk
+                 BRS  sleep
 				 BRS  scan_current_position
+                 BRS  color_dsp
+                 BRS  sleep
 				
 				LOAD  R0  1
 				LOAD  R1  1
 				 BRS  move_to_pos
+                 BRS  place_disk
+                 BRS  sleep
 				 BRS  scan_current_position
-				
+                 BRS  color_dsp
+				 BRS  sleep
+                
 				LOAD  R0  3
 				LOAD  R1  2
 				 BRS  move_to_pos
 				 BRS  scan_current_position
+                 BRS  color_dsp
 				 
 				
+                PULL  R2
 				PULL  R1
 				PULL  R0
 				 RTS
+                 
+color_dsp:      LOAD  R2 GB
+                 ADD  R2 GRID
+                 ADD  R2 R0
+                 MULS R1 3
+                 ADD  R2 R1
+                LOAD  R2 [R2]
+                STOR  R2 [GB+DSP_DEC]
+                 RTS
 @END
 
 

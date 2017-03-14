@@ -12,6 +12,9 @@ scan_current_position:
 			  ADD  R0  R1					; R0 := x + 3y
 			  
 			 LOAD  R1  [GB+SCANNEDCOLOR]
+             LOAD  R2  [GB+ANALOG0]
+             MULS  R1  1000
+              ADD  R1  R2
 			 LOAD  R2  GB
 			  ADD  R2  GRID					; R2 := GB+GRID
 			 STOR  R1  [R2+R0]				; RAM[GB+GRID+OFFSET] := SCANNEDCOLOR
@@ -30,7 +33,7 @@ handle_scanners:
 			 
 			 LOAD  R0  [GB+ANALOG0]
 			 
-chk_white:	  CMP  R0  50						; ANALOG0 <= 50 => scanned_color = white
+chk_white:	  CMP  R0  75						; ANALOG0 <= 75 => scanned_color = white
 			  BGE  chk_black 
 			 LOAD  R1  0
 			 STOR  R1  [GB+SCANNEDCOLOR] 

@@ -73,8 +73,8 @@ update_display:
              PUSH  R3
              PUSH  R4               ; R4 will store the start of the ascii array to display.
              
-             LOAD  R4 GB
-              ADD  R4 DSP_ASCII
+             LOAD  R0 GB
+              ADD  R0 DSP_ASCII
              LOAD  R3 [GB+NXT_DSP]
               ADD  R3 1
              STOR  R3 [GB+NXT_DSP]
@@ -99,7 +99,7 @@ update_display:
              
 dsp_0:		 LOAD  R1  [GB+DSP_DEC]				; load a copy of n into R0
               BPL  dsp_0_dec                    ; If n is positive, display a decimal number
-             LOAD  R1  [R4+2]
+             LOAD  R1  [R0+2]
               DIV  R1  %0100000000
               AND  R1  %011111111
               BRS  Alfa7Seg
@@ -109,11 +109,11 @@ dsp_0_dec:	  MOD  R1  10
 dsp_0_store: STOR  R2  [R5+DSPSEG]		; set the displa code
 			 LOAD  R1  %01				; select the right display digit
 			 STOR  R1  [R5+DSPDIG]		; set the display digit
-			  BRA r_display
+			  BRA  r_display
 			 
 dsp_1:	     LOAD  R1  [GB+DSP_DEC]				; load a copy of n into R0
 			  BPL  dsp_1_dec                    ; If n is positive, display a decimal number
-             LOAD  R1  [R4+2]
+             LOAD  R1  [R0+2]
               AND  R1  %011111111
               BRS  Alfa7Seg
               BRA  dsp_1_store
@@ -123,40 +123,62 @@ dsp_1_dec:    DIV  R1  10				; bit shift right by 4
 dsp_1_store: STOR  R2  [R5+DSPSEG]		; set the display code
 			 LOAD  R1  %010				; select the right display digit
 			 STOR  R1  [R5+DSPDIG]		; set the display digit
-			  BRA r_display
+			  BRA  r_display
 			  
 dsp_2:       LOAD  R1  [GB+DSP_DEC]				; load a copy of n into R0
-			  DIV  R1  100				; bit shift right by 4
+              BPL  dsp_2_dec                    ; If n is positive, display a decimal number
+             LOAD  R1  [R0+1]
+              DIV  R1  %0100000000
+              AND  R1  %011111111
+              BRS  Alfa7Seg
+              BRA  dsp_2_store
+dsp_2_dec:    DIV  R1  100				; bit shift right by 4
 			  MOD  R1  10
 			  BRS  Hex7Seg				; get the display code of the last hex digit
-			 STOR  R2  [R5+DSPSEG]		; set the display code
+dsp_2_store: STOR  R2  [R5+DSPSEG]		; set the display code
 			 LOAD  R1  %0100			; select the right display digit
 			 STOR  R1  [R5+DSPDIG]		; set the display digit
-			  BRA r_display
+			  BRA  r_display
 			 
 dsp_3:		 LOAD  R1  [GB+DSP_DEC]				; load a copy of n into R0
-			  DIV  R1  1000
+              BPL  dsp_3_dec                    ; If n is positive, display a decimal number
+             LOAD  R1  [R0+1]
+              AND  R1  %011111111
+              BRS  Alfa7Seg
+              BRA  dsp_3_store
+dsp_3_dec:    DIV  R1  1000
 			  MOD  R1  10
 			  BRS  Hex7Seg				; get the display code of the last hex digit
-			 STOR  R2  [R5+DSPSEG]		; set the displa code
+dsp_3_store: STOR  R2  [R5+DSPSEG]		; set the displa code
 			 LOAD  R1  %01000			; select the right display digit
 			 STOR  R1  [R5+DSPDIG]		; set the display digit
 			  BRA r_display
 			 
 dsp_4:		 LOAD  R1  [GB+DSP_DEC]				; load a copy of n into R0
-			  DIV  R1  10000			; bit shift right by 4
+			  BPL  dsp_4_dec                    ; If n is positive, display a decimal number
+             LOAD  R1  [R0]
+              DIV  R1  %0100000000
+              AND  R1  %011111111
+              BRS  Alfa7Seg
+              BRA  dsp_4_store
+dsp_4_dec:    DIV  R1  10000			; bit shift right by 4
 			  MOD  R1  10
 			  BRS  Hex7Seg				; get the display code of the last hex digit
-			 STOR  R2  [R5+DSPSEG]		; set the display code
+dsp_4_store: STOR  R2  [R5+DSPSEG]		; set the display code
 			 LOAD  R1  %010000			; select the right display digit
 			 STOR  R1  [R5+DSPDIG]		; set the display digit
 			  BRA r_display
 			  
 dsp_5:		 LOAD  R1  [GB+DSP_DEC]				; load a copy of n into R0
-			  DIV  R1  100000			; bit shift right by 4
+              BPL  dsp_5_dec                    ; If n is positive, display a decimal number
+             LOAD  R1  [R0]
+              AND  R1  %011111111
+              BRS  Alfa7Seg
+              BRA  dsp_5_store			 
+dsp_5_dec:    DIV  R1  100000			; bit shift right by 4
 			  MOD  R1  10
 			  BRS  Hex7Seg				; get the display code of the last hex digit
-			 STOR  R2  [R5+DSPSEG]		; set the display code
+dsp_5_store: STOR  R2  [R5+DSPSEG]		; set the display code
 			 LOAD  R1  %0100000			; select the right display digit
 			 STOR  R1  [R5+DSPDIG]		; set the display digit
 			  BRA r_display
