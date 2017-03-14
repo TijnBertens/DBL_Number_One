@@ -99,10 +99,13 @@ button_2_toggled:
 			  
 button_3_toggled:
             PUSH  R0
-            LOAD  R0  [GB+TARGET_X]
-             ADD  R0  1
-             MOD  R0  3
-            STOR  R0  [GB+TARGET_X]
+            LOAD  R0  %10000000
+            STOR  R0  [R5+OUTPUT]
+            STOR  R0  [GB+OUTPUTSTATE]
+pause_while: LOAD  R0  [R5+INPUT]
+			 AND  R0  %01000
+			 CMP  R0  %01000
+			 BEQ  pause_while
             PULL  R0
 			 RTS
 
