@@ -99,9 +99,11 @@ button_2_toggled:
 			  
 button_3_toggled:
             PUSH  R0
-            LOAD  R0  [GB+PAUSE]
-			 XOR  R0  [1]
-			STOR  R0  [GB+PAUSE]
+            LOAD  R0  [GB+TARGET_X]
+             ADD  R0  1
+             MOD  R0  3
+            STOR  R0  [GB+TARGET_X]
+            PULL  R0
 			 RTS
 
 ;---------------------------------------------------------------------------------;	

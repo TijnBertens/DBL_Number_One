@@ -48,9 +48,6 @@
   DSP_DEC           DW  -1                  ; The decimal value to display, set negative to display ascii instead (next lines).
   DSP_ASCII         DW  'ab', 'cd', 'ef'    ; The ascii value to display in 3 words, 2 characters each.
 
-  ; DEBUG
-  PAUSE				DW  0
-  
    IOAREA      EQU  -16  ;  address of the I/O-Area, modulo 2^18
     INPUT      EQU    7  ;  position of the input buttons (relative to IOAREA)
    OUTPUT      EQU   11  ;  relative position of the power outputs
@@ -144,19 +141,5 @@ d_w:		 LOAD  R1  [R5+TIMER]
 			  BGE  d_w
 			 PULL  R1				; restore registers
 			 PULL  R0
-			  RTS	
-
-wait_for_pause:
-			 PUSH  R0				; save registers
-			 PUSH  R1
-             LOAD  R0  %10000000
-             STOR  R0  [R5+OUTPUT]
-             STOR  R0  [GB+OUTPUTSTATE]
-wfpwhile:	  BRS  poll_inputs
-			  BRS  handle_btns
-			 LOAD  R0  [GB+PAUSE]
-			  BEQ  wfpwhile
-			 PULL  R1
-			 PULL  R0
-			  RTS
+			  RTS				
 @END              

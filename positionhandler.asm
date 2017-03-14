@@ -83,7 +83,6 @@ scan_grid:		PUSH  R0
 				 BRS  scan_current_position
                  BRS  color_dsp
                  BRS  sleep
-				 BRS  wait_for_pause
 				 
 				LOAD  R0  1
 				LOAD  R1  2
@@ -93,7 +92,6 @@ scan_grid:		PUSH  R0
 				 BRS  scan_current_position
                  BRS  color_dsp
                  BRS  sleep
-				 BRS  wait_for_pause
 				 
 				LOAD  R0  0
 				LOAD  R1  2
@@ -103,7 +101,6 @@ scan_grid:		PUSH  R0
 				 BRS  scan_current_position
                  BRS  color_dsp
                  BRS  sleep
-				 BRS  wait_for_pause
 				
 				LOAD  R0  0
 				LOAD  R1  1
@@ -113,7 +110,6 @@ scan_grid:		PUSH  R0
 				 BRS  scan_current_position
                  BRS  color_dsp
                  BRS  sleep
-				 BRS  wait_for_pause
 				
 				LOAD  R0  0
 				LOAD  R1  0
@@ -123,7 +119,6 @@ scan_grid:		PUSH  R0
 				 BRS  scan_current_position
                  BRS  color_dsp
                  BRS  sleep
-				 BRS  wait_for_pause
 				
 				LOAD  R0  1
 				LOAD  R1  0
@@ -133,7 +128,6 @@ scan_grid:		PUSH  R0
 				 BRS  scan_current_position
                  BRS  color_dsp
                  BRS  sleep
-				 BRS  wait_for_pause
 				
 				LOAD  R0  2
 				LOAD  R1  0
@@ -143,7 +137,6 @@ scan_grid:		PUSH  R0
 				 BRS  scan_current_position
                  BRS  color_dsp
                  BRS  sleep
-				 BRS  wait_for_pause
 				
 				LOAD  R0  2
 				LOAD  R1  1
@@ -153,8 +146,6 @@ scan_grid:		PUSH  R0
 				 BRS  scan_current_position
                  BRS  color_dsp
                  BRS  sleep
-				 BRS  wait_for_pause
-				
 				
 				LOAD  R0  1
 				LOAD  R1  1
@@ -164,14 +155,12 @@ scan_grid:		PUSH  R0
 				 BRS  scan_current_position
                  BRS  color_dsp
 				 BRS  sleep
-				 BRS  wait_for_pause
                 
 				LOAD  R0  3
 				LOAD  R1  2
 				 BRS  move_to_pos
 				 BRS  scan_current_position
                  BRS  color_dsp
-				 BRS  wait_for_pause
 				 
 				
                 PULL  R2
