@@ -469,7 +469,7 @@ encode_grid_for_skip:           ADD  R1  1
                                 CMP  R1  8
                                 BLE  encode_grid_for
                                
-                                SUB  SP  1
+                                ADD  SP  1
                                PULL  R3
                                PULL  R2
                                PULL  R1
