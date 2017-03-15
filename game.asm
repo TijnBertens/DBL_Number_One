@@ -2,17 +2,25 @@
 do_next_move:                  PUSH  R0 
                                PUSH  R1
                                
-                               LOAD  R0  2
+                               LOAD  R0  2                  ; Load R0 to check for win
                                 BRS  check_can_win_block
                                 CMP  R0  -1
                                 BEQ  do_next_move_r
                                 
-                               LOAD  R0  0
+                               LOAD  R0  0                  ; Load R0 to check for block
                                 BRS  check_can_win_block
                                 CMP  R0  -1
                                 BEQ  do_next_move_r
                                 
+                               LOAD  R0  2                  ; Load R0 to check for own fork
                                 BRS  check_forks
+                                CMP  R0  -1
+                                BEQ  do_next_move_r
+                                
+                               ;LOAD  R0  0                  ; Load R0 to check for opponent fork
+                                ;BRS  check_forks
+                                ;CMP  R0  -1
+                                ;BEQ  do_next_move_r
                                 
 do_next_move_r:                LOAD  R0  3
                                LOAD  R1  2
@@ -58,6 +66,7 @@ check_can_win_block:          PUSH  R1
                                CMP  R0  -1
                                BEQ  check_can_win_r
                                
+                               ; Check diagnals
                                BRS  check_diag1
                                CMP  R0  -1
                                BEQ  check_can_win_r
@@ -65,9 +74,6 @@ check_can_win_block:          PUSH  R1
                                BRS  check_diag2
                                CMP  R0  -1
                                BEQ  check_can_win_r
-                               
-                               
-                               
                 
 check_can_win_r:              PULL  R1
                                RTS 
@@ -392,12 +398,24 @@ check_diag2_r:                  ADD  SP  1
                                PULL  R1
                                 RTS                   
 ;---------------------------------------------------------------------------------;		                                
-check_forks:                    BRS  check_forks_diag
-                                RTS
+; INPUT:  R0 = color
+; OUTPUT: R0 = -1 if and only if it has found (and done) a move.	 
+check_forks:                   PUSH  R1
 
-check_forks_diag:              PUSH  R0
+                               LOAD  R1  R0
+                                BRS  check_forks_diag
+                                CMP  R0  -1
+                                BEQ  check_forks_r
+                                
+check_forks_r:                 PULL  R1
+                                RTS
+;---------------------------------------------------------------------------------;	
+; INPUT:  R1 = color
+; OUTPUT: R0 = -1 if and only if it has found (and done) a move.	                                
+check_forks_diag:              
                                PUSH  R1
 
+                               LOAD  R0  R1             ; encode_grid expects input in R0, so copy R1 into R0.
                                 BRS  encode_grid        ; Returns in R0
                                LOAD  R1  [GB+FORK_DIAG0]
                                 AND  R0  R1
@@ -408,13 +426,13 @@ check_forks_diag:              PUSH  R0
                                 ADD  R1  FORK_DIAG0
                                LOAD  R0  [R1+1]
                                 BRS  do_move
+                               LOAD  R0  -1
                                 
                    
 check_forks_diag_r:            PULL  R1
-                               PULL  R0
                                 RTS
 ;---------------------------------------------------------------------------------;		                                
-                                
+; INPUT: R0 containing the index of the move to make.                                
 do_move:                       PUSH  R0
                                PUSH  R1
                                PUSH  R2
@@ -435,45 +453,46 @@ do_move:                       PUSH  R0
 ;---------------------------------------------------------------------------------;		                                
 ;INPUT: R0 = wanted color
 ;OUTPUT R0 = current grid encoded in one word, aka 18 bits.
-encode_grid:                   PUSH  R0
-                               PUSH  R1
+encode_grid:                                                ; R0 = result
+                               PUSH  R1                     ; R1 = for counter
+                               PUSH  R2                     ; R2 = copy of input
+                               PUSH  R3                     ; R3 = color currently in grid.
+                               
+                               LOAD  R1  0                  ; for counter = 0
+                               
+                               LOAD  R2  GB                 ; Use R2 to push the grid pointer to the stack.
+                                ADD  R2  GRID
                                PUSH  R2
-                               PUSH  R3
                                
-                               LOAD  R0  GB
-                                ADD  R0  GRID
-                               PUSH  R0
+                               LOAD  R2  R0                 ; copy input into R2 so we can use R0 as output.
+                               LOAD  R0  0
                                
-                               LOAD  R2  R0
-                               LOAD  R1  0
-                               
-encode_grid_for:               LOAD  R3  [[SP]+R1]
+encode_grid_for:               LOAD  R3  [[SP]+R1]          ; Load color present in the grid in R3
                                 
-                                CMP  R3  1  
+                                CMP  R3  1                  ; Color is background, so we can just add it to the result.
                                 BEQ  encode_grid_for_add
                                 
-                                CMP  R3  R0
+                                CMP  R3  R2                 ; Color is equal to wanted color, so encode to 11.
                                 BEQ  encode_grid_for_11
                                 
-                               LOAD  R3  %10
+                               LOAD  R3  %10                ; Color is not equal to wanted, ie unwanted, so encode to 10.
                                 BRA  encode_grid_for_add
 
 encode_grid_for_11:            LOAD  R3  %11                    
 encode_grid_for_add:             OR  R0  R3
                                     
-                                CMP  R1  8
+                                CMP  R1  8                  ; If this is the last iteration, do not multiple, else do.
                                 BEQ  encode_grid_for_skip
                                MULS  R1  %100
                                 
-encode_grid_for_skip:           ADD  R1  1
-                                CMP  R1  8
+encode_grid_for_skip:           ADD  R1  1                  ; increment for counter by 1.
+                                CMP  R1  8                  
                                 BLE  encode_grid_for
                                
                                 ADD  SP  1
                                PULL  R3
                                PULL  R2
                                PULL  R1
-                               PULL  R0
                                 RTS
 ;---------------------------------------------------------------------------------;		                                                                
 @END
