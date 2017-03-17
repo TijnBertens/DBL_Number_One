@@ -608,10 +608,21 @@ do_move:                       PUSH  R0
                                LOAD  R1  R2
                                 BRS  move_to_pos
                                 BRS  place_disk
+                               
+                               LOAD  R0  5000                   ; Check whether the disk was placed correctly.
+                                BRS  sleep_i
+                               LOAD  R0  [GB+SCANNEDCOLOR]
+                                CMP  R0  2
+                                BEQ  do_move_r
+                                
+                               LOAD  R0  'E0'                   ; The placed disk is not black -> error
+                               STOR  R0  [GB+DSP_ASCII]
+                               LOAD  R0  '1 '
+                               STOR  R0  [GB+DSP_ASCII_1]
                                 
                                 ; TODO check correctness of placed disk
 
-                               PULL  R2
+do_move_r:                     PULL  R2
                                PULL  R1
                                PULL  R0
                                 RTS
