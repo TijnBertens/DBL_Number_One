@@ -203,7 +203,11 @@ main_loop:       BRS  essential_routines
                  BRA  main_loop                      ; Loop back to the start of the loop.
 				 
 ;---------------------------------------------------------------------------------;	
-reset:         LOAD  R0  3
+reset:         LOAD  R0  '  '
+               STOR  R0  [GB+DSP_ASCII]
+               STOR  R0  [GB+DSP_ASCII_1]
+               STOR  R0  [GB+DSP_ASCII_2]
+               LOAD  R0  3
                LOAD  R1  2
                 BRS  move_to_pos
                LOAD  SP  [GB+ORIGINAL_SP]

@@ -622,9 +622,9 @@ do_move:                       PUSH  R0
                                ;STOR  R0  [GB+DSP_ASCII]
                                ;LOAD  R0  '1 '
                                ;STOR  R0  [GB+DSP_ASCII_1]
-                               LOAD  R0  3
-                               LOAD  R1  2
-                                BRS  move_to_pos
+                               ;LOAD  R0  3
+                               ;LOAD  R1  2
+                                ;BRS  move_to_pos
                                LOAD  R0  ' 3'
                                 BRA  error_state
                                 
