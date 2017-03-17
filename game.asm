@@ -2,6 +2,11 @@
 do_next_move:                  PUSH  R0 
                                PUSH  R1
                                
+							   ; player light off
+							   Load  R0  [GB+OUTPUTSTATE]
+							    AND  R0  %10111111
+							   STOR  R0  [GB+OUTPUTSTATE]
+							   
                                LOAD  R0  2                  ; Load R0 to check for win
                                 BRS  check_can_win_block
                                 CMP  R0  -1
@@ -42,6 +47,11 @@ do_next_move_r:                LOAD  R0  3
                                LOAD  R1  2
                                 BRS  move_to_pos
                                 
+								; turn player light on
+							   Load  R0  [GB+OUTPUTSTATE]
+							     OR  R0  %01000000
+							   STOR  R0  [GB+OUTPUTSTATE]
+								
                                PULL  R1
                                PULL  R0
                                 RTS
