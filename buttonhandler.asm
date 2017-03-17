@@ -169,9 +169,19 @@ pause_while: BRS  update_display
 button_4_toggled:
             PUSH  R0
             
+			; player light off
+			LOAD  R0  [GB+OUTPUTSTATE]
+			AND  R0  %10111111
+			STOR  R0  [GB+OUTPUTSTATE]
+			
              BRS  scan_grid
              BRS  do_next_move
             
+			; turn player light on
+			LOAD  R0  [GB+OUTPUTSTATE]
+			  OR  R0  %01000000
+			STOR  R0  [GB+OUTPUTSTATE]
+			
             PULL  R0
 			 RTS
 ;---------------------------------------------------------------------------------;	
