@@ -61,6 +61,12 @@
   DSP_ASCII_1       DW  '  '
   DSP_ASCII_2       DW  '  '
 
+  ;FAILURE VARIABLES
+  
+  BTN_5_TS          DW  0
+  BTN_6_TS          DW  0
+  BTN_7_TS          DW  0
+  
    IOAREA      EQU  -16  ;  address of the I/O-Area, modulo 2^18
     INPUT      EQU    7  ;  position of the input buttons (relative to IOAREA)
    OUTPUT      EQU   11  ;  relative position of the power outputs
@@ -75,6 +81,7 @@
 @INCLUDE "scannerhandler.asm"
 @INCLUDE "positionhandler.asm"
 @INCLUDE "game.asm"
+@INCLUDE "failuredetection.asm"
   
 @CODE
 begin :          BRA  main         ;  skip subroutine Hex7Seg
@@ -110,6 +117,7 @@ main_loop:       BRS  essential_routines
 essential_routines:
 				BRS  poll_inputs     
 				BRS  handle_btns
+				BRS  check_engine_failure
 				BRS  handle_scanners
 				BRS  update_display
 				BRS  check_pos
