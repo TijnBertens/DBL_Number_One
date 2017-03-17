@@ -76,7 +76,8 @@ r_drive_motors1: LOAD  R0  [GB+OUTPUTSTATE]
 ;---------------------------------------------------------------------------------;	
 
 place_disk:     PUSH  R0
-                
+                LOAD  R0  [R5+TIMER]
+                STOR  R0  [GB+BTN_5_TS]
 place_disk_while:				
                 LOAD  R0  1						; set the motordirection to 1
 				STOR  R0  [GB+MOTORDIRECTION1]	; on the disc placer motor (motor 1)			 

@@ -180,6 +180,8 @@ button_5_toggled:
 			PUSH  R0						
 			LOAD  R0  0						; turn off the disc placer motor
 			STOR  R0  [GB+MOTORDIRECTION1]  ; which is motor 1
+            LOAD  R1  -1
+            STOR  R1  [GB+BTN_5_TS]
 			PULL  R0
 			 RTS
 
@@ -233,10 +235,6 @@ button_4_down:
 ;---------------------------------------------------------------------------------;				 
 			 
 button_5_down:
-			PUSH  R0
-			LOAD  R0  [R5+TIMER]
-			STOR  R0  [GB+BTN_5_TS]
-			PULL  R0
 			 RTS
 
 ;---------------------------------------------------------------------------------;				 
