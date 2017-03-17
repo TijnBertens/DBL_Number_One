@@ -17,10 +17,26 @@ do_next_move:                  PUSH  R0
                                 CMP  R0  -1
                                 BEQ  do_next_move_r
                                 
-                               ;LOAD  R0  0                  ; Load R0 to check for opponent fork
-                                ;BRS  check_forks
-                                ;CMP  R0  -1
-                                ;BEQ  do_next_move_r
+                               LOAD  R0  0                  ; Load R0 to check for opponent fork
+                                BRS  check_forks
+                                CMP  R0  -1
+                                BEQ  do_next_move_r
+                                
+                                BRS  check_center           ;  Check whether center is empty
+                                CMP  R0  -1
+                                BEQ  do_next_move_r
+                                
+                                BRS  check_opposite_corners ;  Check opposite corners
+                                CMP  R0  -1
+                                BEQ  do_next_move_r
+                                
+                                BRS  check_empty_corner     ;  Check whether there is an empty corner
+                                CMP  R0  -1
+                                BEQ  do_next_move_r
+                                
+                                BRS  check_empty_side       ;  Check whether there's an empty middle in edge
+                                CMP  R0  -1
+                                BEQ  do_next_move_r
                                 
 do_next_move_r:                LOAD  R0  3
                                LOAD  R1  2
@@ -397,40 +413,189 @@ check_diag2_r:                  ADD  SP  1
                                PULL  R2
                                PULL  R1
                                 RTS                   
-;---------------------------------------------------------------------------------;		                                
+;---------------------------------------------------------------------------------;	
 ; INPUT:  R0 = color
-; OUTPUT: R0 = -1 if and only if it has found (and done) a move.	 
-check_forks:                   PUSH  R1
-
-                               LOAD  R1  R0
-                                BRS  check_forks_diag
-                                CMP  R0  -1
+; OUTPUT: R0 = -1 if and only if it has found (and done) a move.	                                
+check_forks:              
+                               PUSH  R1                     ; R1 will keep a copy of the current fork being checked
+                               PUSH  R2                     ; R2 will store the pointer to the current fork in RAM
+                               PUSH  R3
+                               PUSH  R4
+                               
+                               LOAD  R3  R0
+                               LOAD  R2  GB
+                                ADD  R2  FORK_DIAG0
+                               
+                                BRS  encode_grid            ; Returns in R0
+                               LOAD  R4  R0
+                               
+check_forks_while:             LOAD  R1  [R2]               ; Load fork from RAM in R1
+                                
+                                CMP  R1  -1                 ; Forks are -1 terminated
                                 BEQ  check_forks_r
                                 
-check_forks_r:                 PULL  R1
-                                RTS
-;---------------------------------------------------------------------------------;	
-; INPUT:  R1 = color
-; OUTPUT: R0 = -1 if and only if it has found (and done) a move.	                                
-check_forks_diag:              
-                               PUSH  R1
-
-                               LOAD  R0  R1             ; encode_grid expects input in R0, so copy R1 into R0.
-                                BRS  encode_grid        ; Returns in R0
-                               LOAD  R1  [GB+FORK_DIAG0]
-                                AND  R0  R1
+                               LOAD  R0  R4
+                                AND  R0  R1                 ; Compare fork with current state
                                 CMP  R0  R1
-                                BNE  check_forks_diag_r
+                                BEQ  check_forks_found
+                                
+                                ADD  R2  3                  
+                                BRA  check_forks_while
                    
-                               LOAD  R1  GB
-                                ADD  R1  FORK_DIAG0
-                               LOAD  R0  [R1+1]
+check_forks_found:              DIV  R3  2
+                                ADD  R3  1
+                                MOD  R3  2
+                                ADD  R3  1
+                                
+                               LOAD  R0  [R2+R3]
                                 BRS  do_move
                                LOAD  R0  -1
                                 
                    
-check_forks_diag_r:            PULL  R1
+check_forks_r:                  PULL  R4
+                                PULL  R3
+                                PULL  R2
+                                PULL  R1
+                                 RTS
+;---------------------------------------------------------------------------------;		                                
+; OUTPUT: R0 = -1 if and only if it has found (and done) a move.	 
+check_center:                  LOAD  R0  GB
+                                ADD  R0  GRID
+                               LOAD  R0  [R0+4]         ; Load center value in R0
+                               
+                                CMP  R0  1
+                                BNE  check_center_r
+               
+                               LOAD  R0  4
+                                BRS  do_move
+                               LOAD  R0  -1
+               
+check_center_r:                 RTS
+;---------------------------------------------------------------------------------;		                                
+; OUTPUT: R0 = -1 if and only if it has found (and done) a move.
+check_opposite_corners:        PUSH  R1
+                               PUSH  R2
+                               
+                               LOAD  R0  GB
+                                ADD  R0  GRID
+                                
+                               LOAD  R2  0
+                               LOAD  R1  [R0+R2]
+                                CMP  R1  0
+                                BNE  check_opposite_corner_1
+                             
+                               LOAD  R2  8
+                               LOAD  R1  [R0+R2]
+                                CMP  R1  1
+                                BEQ  check_opposite_corner_found
+                             
+check_opposite_corner_1:       LOAD  R2  2
+                               LOAD  R1  [R0+R2]
+                                CMP  R1  0
+                                BNE  check_opposite_corner_2
+                             
+                               LOAD  R2  6
+                               LOAD  R1  [R0+R2]
+                                CMP  R1  1
+                                BEQ  check_opposite_corner_found
+                               
+check_opposite_corner_2:       LOAD  R2  6
+                               LOAD  R1  [R0+R2]
+                                CMP  R1  0
+                                BNE  check_opposite_corner_3
+                             
+                               LOAD  R2  2
+                               LOAD  R1  [R0+R2]
+                                CMP  R1  1
+                                BEQ  check_opposite_corner_found
+                                
+check_opposite_corner_3:       LOAD  R2  8
+                               LOAD  R1  [R0+R2]
+                                CMP  R1  0
+                                BNE  check_opposite_corner_r
+                             
+                               LOAD  R2  0
+                               LOAD  R1  [R0+R2]
+                                CMP  R1  1
+                                BNE  check_opposite_corner_r
+                                
+check_opposite_corner_found:   LOAD  R0  R2
+                                BRS  do_move
+                               LOAD  R0  -1
+
+check_opposite_corner_r:      PULL  R2
+                               PULL  R1
                                 RTS
+;---------------------------------------------------------------------------------;		                                
+; OUTPUT: R0 = -1 if and only if it has found (and done) a move.
+check_empty_corner:            PUSH  R1
+                               PUSH  R2
+                               
+                               LOAD  R2  0
+                               LOAD  R0  GB
+                                ADD  R0  GRID
+                                
+                               LOAD  R1  [R0+R2]
+                                CMP  R1  1
+                                BEQ  check_empty_corner_found
+                             
+                               LOAD  R2  2
+                               LOAD  R1  [R0+R2]
+                                CMP  R1  1
+                                BEQ  check_empty_corner_found
+                               
+                               LOAD  R2  6                               
+                               LOAD  R1  [R0+R2]
+                                CMP  R1  1
+                                BEQ  check_empty_corner_found
+                               
+                               LOAD  R2  8
+                               LOAD  R1  [R0+R2]
+                                CMP  R1  1
+                                BNE  check_empty_corner_r
+                                
+check_empty_corner_found:      LOAD  R0  R2
+                                BRS  do_move
+                               LOAD  R0  -1
+
+check_empty_corner_r:          PULL  R2
+                               PULL  R1
+                                RTS
+;---------------------------------------------------------------------------------;                                
+; OUTPUT: R0 = -1 if and only if it has found (and done) a move.
+check_empty_side:              PUSH  R1
+                               PUSH  R2
+                               
+                               LOAD  R2  1
+                               LOAD  R0  GB
+                                ADD  R0  GRID
+                                
+                               LOAD  R1  [R0+R2]
+                                CMP  R1  1
+                                BEQ  check_empty_corner_found
+                             
+                               LOAD  R2  3
+                               LOAD  R1  [R0+R2]
+                                CMP  R1  1
+                                BEQ  check_empty_corner_found
+                               
+                               LOAD  R2  5                               
+                               LOAD  R1  [R0+R2]
+                                CMP  R1  1
+                                BEQ  check_empty_corner_found
+                               
+                               LOAD  R2  7
+                               LOAD  R1  [R0+R2]
+                                CMP  R1  1
+                                BNE  check_empty_corner_r
+                                
+check_empty_side_found:        LOAD  R0  R2
+                                BRS  do_move
+                               LOAD  R0  -1
+
+check_empty_side_r:            PULL  R2
+                               PULL  R1
+                                RTS                                
 ;---------------------------------------------------------------------------------;		                                
 ; INPUT: R0 containing the index of the move to make.                                
 do_move:                       PUSH  R0
@@ -468,22 +633,24 @@ encode_grid:                                                ; R0 = result
                                LOAD  R0  0
                                
 encode_grid_for:               LOAD  R3  [[SP]+R1]          ; Load color present in the grid in R3
-                                
+                               
                                 CMP  R3  1                  ; Color is background, so we can just add it to the result.
                                 BEQ  encode_grid_for_add
                                 
                                 CMP  R3  R2                 ; Color is equal to wanted color, so encode to 11.
                                 BEQ  encode_grid_for_11
                                 
-                               LOAD  R3  %10                ; Color is not equal to wanted, ie unwanted, so encode to 10.
+                               LOAD  R3  %010                ; Color is not equal to wanted, ie unwanted, so encode to 10.
                                 BRA  encode_grid_for_add
 
-encode_grid_for_11:            LOAD  R3  %11                    
+encode_grid_for_11:            LOAD  R3  %011 
+                
 encode_grid_for_add:             OR  R0  R3
-                                    
+
                                 CMP  R1  8                  ; If this is the last iteration, do not multiple, else do.
                                 BEQ  encode_grid_for_skip
-                               MULS  R1  %100
+                               
+                               MULS  R0  %0100
                                 
 encode_grid_for_skip:           ADD  R1  1                  ; increment for counter by 1.
                                 CMP  R1  8                  
