@@ -151,6 +151,9 @@ FORK_EDG_PER	DW
   BTN_6_TS          DW  0
   BTN_7_TS          DW  0
   
+  ;ORIGNIAL STACK POINTER
+  ORIGINAL_SP       DW  0
+  
    IOAREA      EQU  -16  ;  address of the I/O-Area, modulo 2^18
     INPUT      EQU    7  ;  position of the input buttons (relative to IOAREA)
    OUTPUT      EQU   11  ;  relative position of the power outputs
@@ -176,7 +179,8 @@ begin :          BRA  main         ;  skip subroutine Hex7Seg
 				 
 ;---------------------------------------------------------------------------------;				 				 
 				 
-main:		    LOAD  R5  IOAREA                ; R5 will store the start of the IOAREA.
+main:		    STOR  SP  [GB+ORIGINAL_SP]
+                LOAD  R5  IOAREA                ; R5 will store the start of the IOAREA.
 				LOAD  R0  [R5+TIMER]            ; Store the current timer in NEXTTIMEs
                 STOR  R0  [GB+NEXTTIME0]
                 STOR  R0  [GB+NEXTTIME1]
@@ -199,7 +203,12 @@ main_loop:       BRS  essential_routines
                  BRA  main_loop                      ; Loop back to the start of the loop.
 				 
 ;---------------------------------------------------------------------------------;	
-
+reset:         LOAD  R0  3
+               LOAD  R1  2
+                BRS  move_to_pos
+               LOAD  SP  [GB+ORIGNIAL_SP]
+                BRA  main
+;---------------------------------------------------------------------------------;	
 essential_routines:
 				BRS  poll_inputs     
 				BRS  handle_btns

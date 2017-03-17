@@ -626,7 +626,7 @@ do_move:                       PUSH  R0
                                LOAD  R1  2
                                 BRS  move_to_pos
                                LOAD  R0  ' 3'
-                                BRS  error_state
+                                BRA  error_state
                                 
                                 ; TODO check correctness of placed disk
 

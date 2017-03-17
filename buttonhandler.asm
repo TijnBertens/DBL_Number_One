@@ -122,10 +122,10 @@ r_handle_btns:
 			  
 button_0_toggled:
             PUSH  R0
-            LOAD  R0  3
-            STOR  R0  [GB+TARGET_X]
-            LOAD  R0  2
-            STOR  R0  [GB+TARGET_Y]
+            
+            LOAD  R0  ' e'
+             BRA  error_state
+            
             PULL  R0
 			 RTS
 			
