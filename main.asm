@@ -206,7 +206,7 @@ main_loop:       BRS  essential_routines
 reset:         LOAD  R0  3
                LOAD  R1  2
                 BRS  move_to_pos
-               LOAD  SP  [GB+ORIGNIAL_SP]
+               LOAD  SP  [GB+ORIGINAL_SP]
                 BRA  main
 ;---------------------------------------------------------------------------------;	
 essential_routines:
