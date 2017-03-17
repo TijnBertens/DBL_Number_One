@@ -52,7 +52,7 @@ error_state:
                            STOR  R0  [GB+DSP_ASCII_2]
                            
                             AND  R0  %011111111
-                            CMP  R0  1
+                            CMP  R0  49
                             BLE  error_state_while
                             
                            LOAD  R0  3

@@ -41,11 +41,6 @@ do_next_move:                  PUSH  R0
 do_next_move_r:                LOAD  R0  3
                                LOAD  R1  2
                                 BRS  move_to_pos
-                                
-								; turn player light on
-							   LOAD  R0  [GB+OUTPUTSTATE]
-							     OR  R0  %01000000
-							   STOR  R0  [GB+OUTPUTSTATE]
 								
                                PULL  R1
                                PULL  R0

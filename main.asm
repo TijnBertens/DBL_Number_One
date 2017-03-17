@@ -184,7 +184,7 @@ main:		    LOAD  R5  IOAREA                ; R5 will store the start of the IOAR
 				STOR  R0  [GB+MOTORPREVTIME]
                 STOR  R0  [GB+BTN_6_TS]
                 STOR  R0  [GB+BTN_7_TS]
-                LOAD  R0  %010000000
+                LOAD  R0  %011000000
                 STOR  R0  [GB+OUTPUTSTATE]
                 LOAD  R0  0
                 
