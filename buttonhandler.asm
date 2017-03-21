@@ -77,8 +77,14 @@ btn1hld:	 LOAD  R1  R0				; check button 1 for toggle
 btn2hld:	 LOAD  R1  R0				; check button 2 for toggle
 			  AND  R1  %00000100
 			  CMP  R1  %00000100
-			  BNE  btn3hld
-			  BRS  button_2_down			  
+			  BNE  btn2up
+			  BRS  button_2_down	
+
+btn2up:      LOAD  R1  R0
+              AND  R1  %00000100
+              CMP  R1  0
+              BNE  btn3hld
+              BRS  button_2_up
 
 btn3hld:	 LOAD  R1  R0				; check button 3 for toggle
 			  AND  R1  %00001000
@@ -132,18 +138,12 @@ button_0_toggled:
 ;---------------------------------------------------------------------------------;	
 			  
 button_1_toggled:       ; Checked in error state.
-			 RTS
+			 BRA  reset
+             RTS
 
 ;---------------------------------------------------------------------------------;	
 			  
-button_2_toggled:
-             ;BRS  place_disk
-             BRS scan_grid
-;            PUSH  R0
-;            LOAD  R0  [GB+MOTORDIRECTION2]
-;             BRS  toggle_dir
-;            STOR  R0  [GB+MOTORDIRECTION2]
-;            PULL  R0
+button_2_toggled:       ;  Used to move motor back in down/up.
 			 RTS
 
 ;---------------------------------------------------------------------------------;	
@@ -227,7 +227,23 @@ button_1_down:
 ;---------------------------------------------------------------------------------;				 
 			 
 button_2_down:
-			 RTS
+			PUSH  R0  
+            
+            LOAD  R0  1
+            STOR  R0  [GB+MOTORDIRECTION0]
+            LOAD  R0  0
+            STOR  R0  [GB+MOTORDIRECTION1]
+            STOR  R0  [GB+MOTORDIRECTION2]
+            
+button_2_down_while:
+             BRS  drive_motors1
+            LOAD  R0  [R5+INPUT]
+             AND  R0  %0100
+             CMP  R0  0
+             BNE  button_2_down_while
+            
+            PULL  R0
+             RTS
 
 ;---------------------------------------------------------------------------------;				 
 			 
@@ -262,6 +278,15 @@ button_7_down:
 			STOR  R0  [GB+BTN_7_TS]
 			PULL  R0
 			 RTS			 
+;---------------------------------------------------------------------------------;	
+button_2_up:
+            PUSH  R0  
+            
+            LOAD  R0  0
+            STOR  R0  [GB+MOTORDIRECTION0]
+            
+            PULL  R0
+             RTS
 ;---------------------------------------------------------------------------------;	
 		
 

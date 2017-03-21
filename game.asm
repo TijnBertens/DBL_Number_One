@@ -598,9 +598,9 @@ check_empty_side_r:            PULL  R2
                                 RTS                                
 ;---------------------------------------------------------------------------------;		                                
 ; INPUT: R0 containing the index of the move to make.                                
-do_move:                       PUSH  R0
+do_move:                       PUSH  R2
                                PUSH  R1
-                               PUSH  R2
+                               PUSH  R0
                                
                                LOAD  R2  R0
                                 MOD  R0  3
@@ -616,23 +616,28 @@ do_move:                       PUSH  R0
                                 CMP  R0  2
                                 BEQ  do_move_r
                               
-                               ;LOAD  R0  -1
-                               ;STOR  R0  [GB+DSP_DEC]
-                               ;LOAD  R0  'e0'                   ; The placed disk is not black -> error
-                               ;STOR  R0  [GB+DSP_ASCII]
-                               ;LOAD  R0  '1 '
-                               ;STOR  R0  [GB+DSP_ASCII_1]
-                               ;LOAD  R0  3
-                               ;LOAD  R1  2
-                                ;BRS  move_to_pos
+                                BRS  place_disk                 ; try again
+                               
+                               LOAD  R0  5000                   ; Check whether the disk was placed correctly.
+                                BRS  sleep_i
+                                BRS  essential_routines
+                               LOAD  R0  [GB+SCANNEDCOLOR]
+                                CMP  R0  2
+                                BEQ  do_move_r
+                               
                                LOAD  R0  ' 3'
                                 BRA  error_state
-                                
-                                ; TODO check correctness of placed disk
 
-do_move_r:                     PULL  R2
+do_move_r:                     PULL  R0
+                               
+                               LOAD  R1  GB
+                                ADD  R1  GRID
+                               
+                               LOAD  R2  2
+                               STOR  R2  [R1+R0]
+                               
                                PULL  R1
-                               PULL  R0
+                               PULL  R2
                                 RTS
 ;---------------------------------------------------------------------------------;		                                
 ;INPUT: R0 = wanted color
@@ -681,4 +686,26 @@ encode_grid_for_skip:           ADD  R1  1                  ; increment for coun
                                PULL  R1
                                 RTS
 ;---------------------------------------------------------------------------------;		                                                                
+store_prev_grid:               PUSH  R0             ; grid pointer
+                               PUSH  R1             ; counter
+                               PUSH  R2
+                               
+                               LOAD  R1  0
+                               LOAD  R0  GB
+                                ADD  R0  GRID
+                                
+store_prev_grid_for:           LOAD  R2  [R0]
+                               STOR  R2  [R0+10]
+
+                                ADD  R0  1
+                                ADD  R1  1
+                                
+                                CMP  R1  10
+                                BLT  store_prev_grid_for
+                               
+                               PULL  R2
+                               PULL  R1
+                               PULL  R0
+                                RTS
+;---------------------------------------------------------------------------------;
 @END

@@ -22,7 +22,7 @@
   ; MOTOR 0 - X-AXIS
   NEXTTIME0         DW  0
   PREVTIME0			DW  0
-  MOTORSPEED0 		DW  80
+  MOTORSPEED0 		DW  90
   MOTORDIRECTION0   DW  0
   ; MOTOR 1 - EXTRUDOR
   NEXTTIME1         DW  0
@@ -32,7 +32,7 @@
   ; MOTOR 2 - Y-AXIS
   NEXTTIME2         DW  0
   PREVTIME2			DW  0
-  MOTORSPEED2 		DW  45
+  MOTORSPEED2 		DW  60
   MOTORDIRECTION2   DW  0
   
   ; POSITION
@@ -42,7 +42,8 @@
   TARGET_Y          DW  2
   
   ; Virtual playing field (x + 3y)
-  GRID				DS  10;, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  GRID				DW  1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+  PREV_GRID         DW  1, 1, 1, 1, 1, 1, 1, 1, 1, 1
  
   ; BOARD STATE:  00 = wildcard, 01 = background, 10 = unwanted, 11 = wanted
   ; Fork diagnal 0
@@ -206,10 +207,27 @@ main_loop:       BRS  essential_routines
 reset:         LOAD  R0  '  '
                STOR  R0  [GB+DSP_ASCII]
                STOR  R0  [GB+DSP_ASCII_1]
-               STOR  R0  [GB+DSP_ASCII_2]
+               STOR  R0  [GB+DSP_ASCII_2]            ; removed move_to_pos 3,2 here.
                LOAD  R0  3
-               LOAD  R1  2
-                BRS  move_to_pos
+               STOR  R0  [GB+POS_X]
+               STOR  R0  [GB+TARGET_X]
+               LOAD  R0  2
+               STOR  R0  [GB+POS_Y]
+               STOR  R0  [GB+TARGET_Y]
+               
+               LOAD  R2  1
+               LOAD  R1  0
+               LOAD  R0  GB
+                ADD  R0  GRID
+                                
+reset_for:     STOR  R2  [R0]
+
+                ADD  R0  1
+                ADD  R1  1
+                                
+                CMP  R1  10
+                BLT  reset_for
+               
                LOAD  SP  [GB+ORIGINAL_SP]
                 BRA  main
 ;---------------------------------------------------------------------------------;	

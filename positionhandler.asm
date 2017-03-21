@@ -48,7 +48,12 @@ move_to_pos:
 				PUSH R1
 				PUSH R2
 				PUSH R3
-	
+				
+				 CMP R0  [GB+POS_X]			
+				 BNE move_while_begin
+				 CMP R1  [GB+POS_Y]
+				 BEQ move_to_pos_r
+    
 move_while_begin:
 				 BRS essential_routines
 				
@@ -63,7 +68,26 @@ move_while_begin:
 				 CMP R3  R1
 				 BNE move_while_begin
 				
-				PULL R3
+                 CMP R0  3
+                 BNE move_to_pos_r
+                 CMP R1  2
+                 BNE move_to_pos_r
+                 
+                 PUSH  R0
+                 LOAD  R0  2500
+                  BRS  sleep_i
+                 PULL  R0
+                 
+                 BRS poll_inputs
+                 BRS handle_scanners
+                LOAD R2  [GB+SCANNEDCOLOR]
+                 CMP R2  1
+                 BEQ move_to_pos_r
+                 
+                LOAD R0  ' 4'
+                 BRA error_state
+                
+move_to_pos_r:  PULL R3
 				PULL R2
 				PULL R1
 				PULL R0
@@ -71,10 +95,12 @@ move_while_begin:
 
 ;---------------------------------------------------------------------------------;				 				 
 
-scan_grid:		PUSH  R0
+scan_grid:      PUSH  R0
 				PUSH  R1
 				PUSH  R2
-                
+          
+                 BRS  store_prev_grid
+          
 				LOAD  R0  2
 				LOAD  R1  2
 				 BRS  move_to_pos
@@ -193,6 +219,8 @@ scan_grid:		PUSH  R0
                  BRS  color_dsp
 				 ;BRS  sleep
 				
+                 BRS  check_cheating
+                
                 PULL  R2
 				PULL  R1
 				PULL  R0
