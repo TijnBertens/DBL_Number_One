@@ -52,31 +52,15 @@ error_state:
                            STOR  R1  [GB+DSP_ASCII_1]
                            STOR  R0  [GB+DSP_ASCII_2]
                            
-                            DIV  R1  %0100000000
-                            AND  R1  %011111111
-                            CMP  R0  49
+                            DIV  R0  %0100000000
+                            AND  R0  %011111111
+                            CMP  R0  49             ; ...
                             BLE  error_state_while
                             
+                           STOR  R0  [GB+DSP_DEC]
                            LOAD  R0  3
                            LOAD  R1  2
-                            BRS  poll_inputs     
-                            BRS  handle_btns
-                            ;BRS  check_engine_failure
-                            BRS  handle_scanners
-                            BRS  update_display
-                            BRS  check_pos
-                            BRS  drive_motors1
-				
-                           STOR R0  [GB+TARGET_X]
-                           STOR R1  [GB+TARGET_Y]
-                           
-                           LOAD R2  [GB+POS_X]
-                           LOAD R3  [GB+POS_Y]
-                           
-                            CMP R2  R0					;if(x != tarx || y != tarY) => wait
-                            BNE move_while_begin
-                            CMP R3  R1
-                            BNE move_while_begin
+                            BRS  move_to_pos
                            
 error_state_while:         BRS  update_display
                            
