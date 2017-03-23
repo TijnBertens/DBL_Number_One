@@ -9,6 +9,12 @@ handle_btns: PUSH  R0
 			 LOAD  R1  [GB+INPUTSTATE]
 			  XOR  R0  R1
 			  AND  R0  R1
+              
+             LOAD  R2  [GB+IS_BUSY]
+              CMP  R2  0
+              BEQ  btn0tgl
+              
+              AND  R0  %11100001
 			  
 btn0tgl:	 LOAD  R1  R0				; check button 0 for toggle
 			  AND  R1  %00000001
@@ -61,6 +67,11 @@ btn7tgl:	 LOAD  R1  R0				; check button 7 for toggle
 ;now functions for holding down;
 
 btns_down:	 LOAD  R0  [GB+INPUTSTATE]
+             
+             LOAD  R2  [GB+IS_BUSY]
+              CMP  R2  0
+              BEQ  btn0hld
+              AND  R0  %11100001
 
 btn0hld:	 LOAD  R1  R0				; check button 0 for toggle
 			  AND  R1  %00000001
@@ -129,7 +140,7 @@ r_handle_btns:
 button_0_toggled:
             PUSH  R0
             
-            LOAD  R0  [GB+INPUTSTATE]
+            LOAD  R0  [R5+INPUT]
              AND  R0  %01000000
              CMP  R0  %01000000
              BEQ  check_y_pushed
@@ -143,7 +154,7 @@ button_0_toggled:
             STOR  R0  [GB+POS_X]
              
 check_y_pushed:             
-            LOAD  R0  [GB+INPUTSTATE]
+            LOAD  R0  [R5+INPUT]
              AND  R0  %010000000
              CMP  R0  %010000000
              BEQ  button_0_toggled_r
@@ -196,8 +207,11 @@ button_4_toggled:
             
 			; player light off
 			LOAD  R0  [GB+OUTPUTSTATE]
-			AND  R0  %10111111
+			 AND  R0  %10111111
 			STOR  R0  [GB+OUTPUTSTATE]
+            
+            LOAD  R0  1
+            STOR  R0  [GB+IS_BUSY]
 			
              BRS  scan_grid
              BRS  do_next_move

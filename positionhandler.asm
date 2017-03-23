@@ -78,6 +78,9 @@ move_while_begin:
                   BRS  sleep_i
                  PULL  R0
                  
+                LOAD R0  0
+                STOR R0  [GB+IS_BUSY]
+                
                  BRS poll_inputs
                  BRS handle_scanners
                 LOAD R2  [GB+SCANNEDCOLOR]

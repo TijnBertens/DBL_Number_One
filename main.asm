@@ -46,6 +46,7 @@
   PREV_GRID         DW  1, 1, 1, 1, 1, 1, 1, 1, 1, 1
  
   IS_FIRST_MOVE     DW  1
+  IS_BUSY           DW  0
  
   ; BOARD STATE:  00 = wildcard, 01 = background, 10 = unwanted, 11 = wanted
   ; Fork diagnal 0
@@ -216,6 +217,7 @@ reset:         LOAD  R0  '  '
                LOAD  R0  GB
                 ADD  R0  GRID
                STOR  R2  [GB+IS_FIRST_MOVE]
+               STOR  R1  [GB+IS_BUSY]
                                 
 reset_for:     STOR  R2  [R0]
 
