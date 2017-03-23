@@ -45,6 +45,8 @@
   GRID				DW  1, 1, 1, 1, 1, 1, 1, 1, 1, 1
   PREV_GRID         DW  1, 1, 1, 1, 1, 1, 1, 1, 1, 1
  
+  IS_FIRST_MOVE     DW  1
+ 
   ; BOARD STATE:  00 = wildcard, 01 = background, 10 = unwanted, 11 = wanted
   ; Fork diagnal 0
   FORK_DIAG0        DW  %000011000001110101, 8, 7, %110101000001000011, 2, 1, %010111010000110000, 0, 1, %110000010000010111, 6, 3
@@ -170,6 +172,7 @@ FORK_EDG_PER	DW
 @INCLUDE "positionhandler.asm"
 @INCLUDE "game.asm"
 @INCLUDE "failuredetection.asm"
+@INCLUDE "windetection.asm"
   
 @CODE
 begin :          BRA  main         ;  skip subroutine Hex7Seg
@@ -194,13 +197,6 @@ main:		    STOR  SP  [GB+ORIGINAL_SP]
                 LOAD  R0  0
                 
 main_loop:       BRS  essential_routines
-                 ;BRS  scan_grid
-                 ;ADD  R0  1
-                ;LOAD  R2  R0
-                ;MULS  R2  10000
-                ;LOAD  R1  [GB+DSP_DEC]
-                 ;;ADD  R1  R2
-                ;STOR  R1  [GB+DSP_DEC]
                  BRA  main_loop                      ; Loop back to the start of the loop.
 				 
 ;---------------------------------------------------------------------------------;	
@@ -219,6 +215,7 @@ reset:         LOAD  R0  '  '
                LOAD  R1  0
                LOAD  R0  GB
                 ADD  R0  GRID
+               STOR  R2  [GB+IS_FIRST_MOVE]
                                 
 reset_for:     STOR  R2  [R0]
 

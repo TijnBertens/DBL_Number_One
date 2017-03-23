@@ -38,9 +38,17 @@ do_next_move:                  PUSH  R0
                                 CMP  R0  -1
                                 BEQ  do_next_move_r
                                 
-do_next_move_r:                LOAD  R0  3
+                                BRA  tie
+                                
+do_next_move_r:                LOAD  R0  2
+                                BRS  check_win
+
+                               LOAD  R0  3
                                LOAD  R1  2
                                 BRS  move_to_pos
+
+                               LOAD  R0  0
+                               STOR  R0  [GB+IS_FIRST_MOVE]
 								
                                PULL  R1
                                PULL  R0

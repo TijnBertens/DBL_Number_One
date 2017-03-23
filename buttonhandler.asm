@@ -129,6 +129,34 @@ r_handle_btns:
 button_0_toggled:
             PUSH  R0
             
+            LOAD  R0  [GB+INPUTSTATE]
+             AND  R0  %01000000
+             CMP  R0  %01000000
+             BEQ  check_y_pushed
+             
+            LOAD  R0  [GB+MOTORDIRECTION0]
+             CMP  R0  -1
+             BNE  check_y_pushed
+             
+            LOAD  R0  [GB+POS_X]
+             SUB  R0  1
+            STOR  R0  [GB+POS_X]
+             
+check_y_pushed:             
+            LOAD  R0  [GB+INPUTSTATE]
+             AND  R0  %010000000
+             CMP  R0  %010000000
+             BEQ  button_0_toggled_r
+             
+            LOAD  R0  [GB+MOTORDIRECTION2]
+             CMP  R0  -1
+             BNE  button_0_toggled_r
+             
+            LOAD  R0  [GB+POS_Y]
+             SUB  R0  1
+            STOR  R0  [GB+POS_Y]
+             
+button_0_toggled_r:
             LOAD  R0  ' e'
              BRA  error_state
             

@@ -66,9 +66,16 @@ check_cheating_skip:        ADD  R2  1
                             BLT  check_cheating_for
 
                             CMP  R3  1
-                            BLE  check_cheating_r
+                            BEQ  check_cheating_r
+                            
+                            CMP  R3  0
+                            BNE  check_cheating_err
+                            
+                           LOAD  R0  [GB+IS_FIRST_MOVE]
+                            CMP  R0  1
+                            BEQ  check_cheating_r
 
-                           LOAD  R0  ' 5'
+check_cheating_err:        LOAD  R0  ' 5'
                             BRA  error_state
                  
 check_cheating_r:          PULL  R3
