@@ -77,12 +77,101 @@ check_cheating_skip:        ADD  R2  1
 
 check_cheating_err:        LOAD  R0  ' 5'
                             BRA  error_state
-                 
-check_cheating_r:          PULL  R3
+				 
+check_cheating_r:          BRS  check_cheating_color_diff
+							CMP  R0  1
+							BNE  check_cheating_r
+						   LOAD  R0  ' 7'
+						    BRA  error_state
+							
+						   PULL  R3
                            PULL  R2
                            PULL  R1
                            PULL  R0
                             RTS
+;---------------------------------------------------------------------------------;
+;OUTPUT: R0 contains 1 if there the difference was not equal to 1, 0 otherwise
+check_cheating_color_diff:
+						   PUSH  R0
+						   PUSH  R1
+						   PUSH  R2
+						   PUSH  R3
+						   PUSH  R4
+							
+							ADD  SP  4
+						WHITE_COUNT    EQU  0
+						BLACK_COUNT    EQU  1
+						WHITE_COUNT_PREV  EQU  2
+						BLACK_COUNT_PREV  EQU  3
+							
+						   LOAD  R3  0
+						   LOAD  R4  GB
+						    ADD  R4  GRID
+						
+						;----cur grid---;
+color_diff_while:		   LOAD  R0  [R4]
+						    CMP  R0  0
+						    BEQ  color_diff_chk_cur_blc
+						   LOAD  R1  [SP+WHITE_COUNT]
+						    ADD  R1  1
+						   STOR  R1  [SP+WHITE_COUNT]
+						    BRA  color_diff_chk_prev_wht
+							
+color_diff_chk_cur_blc:		CMP  R0  2
+							BEQ  color_diff_chk_prev_wht
+						   LOAD  R1  [SP+BLACK_COUNT]
+						    ADD  R1  1
+						   STOR  R1  [SP+BLACK_COUNT]
+							
+						;----prev grid---;
+color_diff_chk_prev_wht:   LOAD  R0  [R4+10]
+						    CMP  R0  0
+						    BEQ  color_diff_chk_prev_blc
+						   LOAD  R1  [SP+WHITE_COUNT_PREV]
+						    ADD  R1  1
+						   STOR  R1  [SP+WHITE_COUNT_PREV]
+						    BRA  color_diff_while_skip
+							
+color_diff_chk_prev_blc:	CMP  R0  2
+							BEQ  color_diff_while_skip
+						   LOAD  R1  [SP+BLACK_COUNT_PREV]
+						    ADD  R1  1
+						   STOR  R1  [SP+BLACK_COUNT_PREV]
+						   
+color_diff_while_skip:	    ADD  R3  1
+							ADD  R4  1
+							
+							CMP  R3  8
+							BLE  color_diff_while
+						   
+						   
+						   LOAD  R1  [SP+WHITE_COUNT]
+						   LOAD  R2  [SP+WHITE_COUNT_PREV]
+						   LOAD  R3  [SP+BLACK_COUNT]
+						   LOAD  R4  [SP+BLACK_COUNT_PREV]
+						   
+						    SUB  R1  R3
+							CMP  R1  1
+							BGT  check_cheating_color_diff_return_1
+							CMP  R1  -1
+							BLT  check_cheating_color_diff_return_1
+							CMP  R1  0 
+							BEQ  check_cheating_color_diff_return_1
+							
+						   LOAD  R0  0
+							BRA  check_cheating_color_diff_r
+							
+check_cheating_color_diff_return_1:
+						   LOAD  R0  1  
+						   
+check_cheating_color_diff_r:
+						    SUB  SP  4
+						   PULL  R4
+						   PULL  R3
+						   PULL  R2
+						   PULL  R1
+						   
+						    RTS
 ;---------------------------------------------------------------------------------;
 ; INPUT: R0 = error code			 
 error_state:
