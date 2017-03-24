@@ -80,11 +80,11 @@ check_cheating_err:        LOAD  R0  ' 5'
 				 
 check_cheating_r:          BRS  check_cheating_color_diff
 							CMP  R0  1
-							BNE  check_cheating_r
+							BNE  check_cheating_rr
 						   LOAD  R0  ' 7'
 						    BRA  error_state
 							
-						   PULL  R3
+check_cheating_rr:		   PULL  R3
                            PULL  R2
                            PULL  R1
                            PULL  R0
@@ -108,7 +108,9 @@ check_cheating_color_diff:
 						    ADD  R4  GRID
                             
                            STOR  R3  [SP+WHITE_COUNT]
-                           STOR  R3  [SP+BLACK_COUNT]
+                           LOAD  R3  1
+                           STOR  R3  [SP+BLACK_COUNT]       ; init to 1 because we're about to put one down.
+                           LOAD  R3  0
                            STOR  R3  [SP+WHITE_COUNT_PREV]
                            STOR  R3  [SP+BLACK_COUNT_PREV]
 						
@@ -159,8 +161,6 @@ color_diff_while_skip:	    ADD  R3  1
 							BGT  check_cheating_color_diff_return_1
 							CMP  R1  -1
 							BLT  check_cheating_color_diff_return_1
-							CMP  R1  0 
-							BEQ  check_cheating_color_diff_return_1
 							
 						   LOAD  R0  0
 							BRA  check_cheating_color_diff_r

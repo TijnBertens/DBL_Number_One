@@ -623,8 +623,13 @@ do_move:                       PUSH  R2
                                LOAD  R0  [GB+SCANNEDCOLOR]
                                 CMP  R0  2
                                 BEQ  do_move_r
+                                CMP  R0  0
+                                BNE  do_move_retry
+                                
+                               LOAD  R0  ' 8'
+                                BRA  error_state
                               
-                                BRS  place_disk                 ; try again
+do_move_retry:                  BRS  place_disk                 ; try again
                                
                                LOAD  R0  5000                   ; Check whether the disk was placed correctly.
                                 BRS  sleep_i
@@ -632,8 +637,13 @@ do_move:                       PUSH  R2
                                LOAD  R0  [GB+SCANNEDCOLOR]
                                 CMP  R0  2
                                 BEQ  do_move_r
+                                CMP  R0  0
+                                BNE  do_move_3
+                                
+                               LOAD  R0  ' 8'
+                                BRA  error_state
                                
-                               LOAD  R0  ' 3'
+do_move_3:                     LOAD  R0  ' 3'
                                 BRA  error_state
 
 do_move_r:                     PULL  R0
