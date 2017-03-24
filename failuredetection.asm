@@ -115,14 +115,14 @@ check_cheating_color_diff:
 						;----cur grid---;
 color_diff_while:		   LOAD  R0  [R4]
 						    CMP  R0  0
-						    BEQ  color_diff_chk_cur_blc
+						    BNE  color_diff_chk_cur_blc
 						   LOAD  R1  [SP+WHITE_COUNT]
 						    ADD  R1  1
 						   STOR  R1  [SP+WHITE_COUNT]
 						    BRA  color_diff_chk_prev_wht
 							
 color_diff_chk_cur_blc:		CMP  R0  2
-							BEQ  color_diff_chk_prev_wht
+							BNE  color_diff_chk_prev_wht
 						   LOAD  R1  [SP+BLACK_COUNT]
 						    ADD  R1  1
 						   STOR  R1  [SP+BLACK_COUNT]
@@ -130,14 +130,14 @@ color_diff_chk_cur_blc:		CMP  R0  2
 						;----prev grid---;
 color_diff_chk_prev_wht:   LOAD  R0  [R4+10]
 						    CMP  R0  0
-						    BEQ  color_diff_chk_prev_blc
+						    BNE  color_diff_chk_prev_blc
 						   LOAD  R1  [SP+WHITE_COUNT_PREV]
 						    ADD  R1  1
 						   STOR  R1  [SP+WHITE_COUNT_PREV]
 						    BRA  color_diff_while_skip
 							
 color_diff_chk_prev_blc:	CMP  R0  2
-							BEQ  color_diff_while_skip
+							BNE  color_diff_while_skip
 						   LOAD  R1  [SP+BLACK_COUNT_PREV]
 						    ADD  R1  1
 						   STOR  R1  [SP+BLACK_COUNT_PREV]
