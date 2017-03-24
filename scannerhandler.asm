@@ -38,13 +38,13 @@ handle_scanners:
 			 
 			 LOAD  R0  [GB+ANALOG0]
 			 
-chk_white:	  CMP  R0  130						; ANALOG0 <= 75 => scanned_color = white
+chk_white:	  CMP  R0  [GB+WHITE_VALUE]			; ANALOG0 <= 75 => scanned_color = white
 			  BGE  chk_black 
 			 LOAD  R1  0
 			 STOR  R1  [GB+SCANNEDCOLOR] 
 			  BRA  chk_scn_chg
 			 
-chk_black:	  CMP  R0  200						; ANALOG0 >= 200 => scanned_color = black
+chk_black:	  CMP  R0  [GB+BLACK_VALUE]			; ANALOG0 >= 200 => scanned_color = black
 			  BLE  st_bg 
 			 LOAD  R1  2
 			 STOR  R1  [GB+SCANNEDCOLOR] 
