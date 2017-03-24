@@ -92,13 +92,12 @@ check_cheating_r:          BRS  check_cheating_color_diff
 ;---------------------------------------------------------------------------------;
 ;OUTPUT: R0 contains 1 if there the difference was not equal to 1, 0 otherwise
 check_cheating_color_diff:
-						   PUSH  R0
 						   PUSH  R1
 						   PUSH  R2
 						   PUSH  R3
 						   PUSH  R4
 							
-							ADD  SP  4
+							SUB  SP  4
 						WHITE_COUNT    EQU  0
 						BLACK_COUNT    EQU  1
 						WHITE_COUNT_PREV  EQU  2
@@ -107,6 +106,11 @@ check_cheating_color_diff:
 						   LOAD  R3  0
 						   LOAD  R4  GB
 						    ADD  R4  GRID
+                            
+                           STOR  R3  [SP+WHITE_COUNT]
+                           STOR  R3  [SP+BLACK_COUNT]
+                           STOR  R3  [SP+WHITE_COUNT_PREV]
+                           STOR  R3  [SP+BLACK_COUNT_PREV]
 						
 						;----cur grid---;
 color_diff_while:		   LOAD  R0  [R4]
@@ -165,7 +169,7 @@ check_cheating_color_diff_return_1:
 						   LOAD  R0  1  
 						   
 check_cheating_color_diff_r:
-						    SUB  SP  4
+						    ADD  SP  4
 						   PULL  R4
 						   PULL  R3
 						   PULL  R2

@@ -14,7 +14,7 @@ handle_btns: PUSH  R0
               CMP  R2  0
               BEQ  btn0tgl
               
-              AND  R0  %11100001
+              AND  R0  %11101001
 			  
 btn0tgl:	 LOAD  R1  R0				; check button 0 for toggle
 			  AND  R1  %00000001
@@ -71,7 +71,7 @@ btns_down:	 LOAD  R0  [GB+INPUTSTATE]
              LOAD  R2  [GB+IS_BUSY]
               CMP  R2  0
               BEQ  btn0hld
-              AND  R0  %11100001
+              AND  R0  %11101001
 
 btn0hld:	 LOAD  R1  R0				; check button 0 for toggle
 			  AND  R1  %00000001
@@ -306,9 +306,16 @@ button_5_down:
 			 
 button_6_down:
 			PUSH  R0
-			LOAD  R0  [R5+TIMER]
+            
+            LOAD  R0  [GB+MOTORDIRECTION0]
+             CMP  R0  0
+             BNE  button_6_down_r
+            
+            LOAD  R0  [R5+TIMER]
 			STOR  R0  [GB+BTN_6_TS]
-			PULL  R0
+			
+button_6_down_r:
+            PULL  R0
 			 RTS			 
 			 
 
@@ -316,9 +323,16 @@ button_6_down:
 			 
 button_7_down:
 			PUSH  R0
+            
+            LOAD  R0  [GB+MOTORDIRECTION2]
+             CMP  R0  0
+             BNE  button_7_down_r
+            
 			LOAD  R0  [R5+TIMER]
 			STOR  R0  [GB+BTN_7_TS]
-			PULL  R0
+			
+button_7_down_r:            
+            PULL  R0
 			 RTS			 
 ;---------------------------------------------------------------------------------;	
 button_2_up:
