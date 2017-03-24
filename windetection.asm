@@ -351,7 +351,7 @@ player_win_while:              BRS  update_display
                               LOAD  R0  [GB+INPUTSTATE]
                                AND  R0  %010
                                CMP  R0  %010
-                               BNE  machine_win_while
+                               BNE  player_win_while
                                BRA  reset
 ;---------------------------------------------------------------------------------;     
 tie:                          LOAD  R0  -1
