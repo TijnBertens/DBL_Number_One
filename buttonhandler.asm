@@ -189,15 +189,32 @@ button_2_toggled:       ;  Used to move motor back in down/up.
 			  
 button_3_toggled:
             PUSH  R0
-            LOAD  R0  %10000000
-            STOR  R0  [R5+OUTPUT]
-            STOR  R0  [GB+OUTPUTSTATE]
-pause_while: BRS  update_display 
-            LOAD  R0  [R5+INPUT]
-			 AND  R0  %01000
-			 CMP  R0  %01000
-			 BEQ  pause_while
-            PULL  R0
+;            LOAD  R0  %10000000
+;            STOR  R0  [R5+OUTPUT]
+;            STOR  R0  [GB+OUTPUTSTATE]
+;pause_while: BRS  update_display 
+;            LOAD  R0  [R5+INPUT]
+;			 AND  R0  %01000
+;			 CMP  R0  %01000
+;			 BEQ  pause_while
+;            PULL  R0
+			; player light off
+			LOAD  R0  [GB+OUTPUTSTATE]
+			 AND  R0  %10111111
+			STOR  R0  [GB+OUTPUTSTATE]
+            
+            LOAD  R0  1
+            STOR  R0  [GB+IS_BUSY]
+			
+             BRS  do_calibration_round
+            
+			LOAD  R0  0
+            STOR  R0  [GB+IS_BUSY]
+			
+			; turn player light on
+			LOAD  R0  [GB+OUTPUTSTATE]
+			  OR  R0  %01000000
+			STOR  R0  [GB+OUTPUTSTATE]
 			 RTS
 
 ;---------------------------------------------------------------------------------;	

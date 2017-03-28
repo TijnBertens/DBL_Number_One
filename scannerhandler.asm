@@ -73,4 +73,167 @@ r_hndls_scn: PULL  R1
 scanned_color_changed:
 			  RTS			
 			  
+;---------------------------------------------------------------------------------;	
+
+do_calibration_round:
+				PUSH  R0
+				PUSH  R1
+				PUSH  R2
+				PUSH  R3
+				PUSH  R4
+
+				LOAD  R2  0			; sum of black values
+				LOAD  R3  0			; sum of bg values
+				LOAD  R4  0			; sum of white values
+				
+				LOAD  R0  2
+				LOAD  R1  2
+				 BRS  move_to_pos
+                PUSH  R0
+                LOAD  R0  2500 
+                BRS  sleep_i		
+                PULL  R0
+                 BRS  scan_current_position
+                 BRS  color_dsp
+				LOAD  R0  [GB+SCANNEDCOLOR]
+				 ADD  R2  R0
+                
+                 ;BRS  sleep
+				 
+				LOAD  R0  1
+				LOAD  R1  2
+				 BRS  move_to_pos
+                PUSH  R0
+                LOAD  R0  2500 
+                BRS  sleep_i		
+                PULL  R0
+				 BRS  scan_current_position
+                 BRS  color_dsp
+				LOAD  R0  [GB+SCANNEDCOLOR]
+				 ADD  R2  R0
+				 
+				LOAD  R0  0
+				LOAD  R1  2
+				 BRS  move_to_pos
+                 PUSH  R0
+                LOAD  R0  2500 
+                BRS  sleep_i		
+                PULL  R0
+				 BRS  scan_current_position
+                 BRS  color_dsp
+				LOAD  R0  [GB+SCANNEDCOLOR]
+				 ADD  R2  R0
+				
+				LOAD  R0  0
+				LOAD  R1  1
+				 BRS  move_to_pos
+                 PUSH  R0
+                LOAD  R0  2500 
+                BRS  sleep_i		
+                PULL  R0
+				 BRS  scan_current_position
+                 BRS  color_dsp
+				LOAD  R0  [GB+SCANNEDCOLOR]
+				 ADD  R3  R0
+				
+				
+				LOAD  R0  1
+				LOAD  R1  1
+				 BRS  move_to_pos
+                 PUSH  R0
+                LOAD  R0  2500 
+                BRS  sleep_i		
+                PULL  R0
+				 BRS  scan_current_position
+                 BRS  color_dsp
+				LOAD  R0  [GB+SCANNEDCOLOR]
+				 ADD  R3  R0
+				
+				LOAD  R0  2
+				LOAD  R1  1
+				 BRS  move_to_pos
+                 PUSH  R0
+                LOAD  R0  2500 
+                BRS  sleep_i		
+                PULL  R0
+				 BRS  scan_current_position
+                 BRS  color_dsp
+                LOAD  R0  [GB+SCANNEDCOLOR]
+				 ADD  R3  R0
+				
+				LOAD  R0  2
+				LOAD  R1  0
+				 BRS  move_to_pos
+                 PUSH  R0
+                LOAD  R0  2500 
+                BRS  sleep_i		
+                PULL  R0
+				 BRS  scan_current_position
+                 BRS  color_dsp
+				LOAD  R0  [GB+SCANNEDCOLOR]
+				 ADD  R4  R0
+				
+				
+				LOAD  R0  1
+				LOAD  R1  0
+				 BRS  move_to_pos
+                 PUSH  R0
+                LOAD  R0  2500 
+                BRS  sleep_i		
+                PULL  R0
+				 BRS  scan_current_position
+                 BRS  color_dsp
+				LOAD  R0  [GB+SCANNEDCOLOR]
+				 ADD  R2  R0
+				LOAD  R0  [GB+SCANNEDCOLOR]
+				 ADD  R4  R0
+				
+				LOAD  R0  0
+				LOAD  R1  0
+				 BRS  move_to_pos
+                 PUSH  R0
+                LOAD  R0  2500 
+                BRS  sleep_i		
+                PULL  R0
+				 BRS  scan_current_position
+                 BRS  color_dsp
+				LOAD  R0  [GB+SCANNEDCOLOR]
+				 ADD  R4  R0
+				 
+				 
+				 DIV  R2  3		; average black
+				 DIV  R3  3		; average bg
+				 DIV  R4  3		; average white
+				 
+                LOAD  R0  R2	;halfway between black and bg
+				 ADD  R0  R3
+				 DIV  R0  2
+				 
+				STOR  R0  [GB+BLACK_VALUE]
+				STOR  R0  [GB+DSP_DEC]
+				
+				LOAD  R0  10000 
+                BRS  sleep_i		
+				
+				LOAD  R0  R3	;halfway between bg and white
+				 ADD  R0  R4
+				 DIV  R0  2
+				 
+				STOR  R0  [GB+WHITE_VALUE]
+				STOR  R0  [GB+DSP_DEC]
+				
+				LOAD  R0  10000 
+                BRS  sleep_i		
+				
+				LOAD  R0  3
+				LOAD  R1  2
+				 BRS  move_to_pos
+				
+				PULL  R4
+				PULL  R3
+                PULL  R2
+				PULL  R1
+				PULL  R0
+				 RTS
+			  
 @END
