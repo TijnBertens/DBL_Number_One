@@ -93,9 +93,8 @@ do_calibration_round:
                 LOAD  R0  2500 
                 BRS  sleep_i		
                 PULL  R0
-                 BRS  scan_current_position
                  BRS  color_dsp
-				LOAD  R0  [GB+SCANNEDCOLOR]
+				LOAD  R0  [GB+ANALOG0]
 				 ADD  R2  R0
                 
                  ;BRS  sleep
@@ -107,9 +106,8 @@ do_calibration_round:
                 LOAD  R0  2500 
                 BRS  sleep_i		
                 PULL  R0
-				 BRS  scan_current_position
                  BRS  color_dsp
-				LOAD  R0  [GB+SCANNEDCOLOR]
+				LOAD  R0  [GB+ANALOG0]
 				 ADD  R2  R0
 				 
 				LOAD  R0  0
@@ -119,9 +117,8 @@ do_calibration_round:
                 LOAD  R0  2500 
                 BRS  sleep_i		
                 PULL  R0
-				 BRS  scan_current_position
                  BRS  color_dsp
-				LOAD  R0  [GB+SCANNEDCOLOR]
+				LOAD  R0  [GB+ANALOG0]
 				 ADD  R2  R0
 				
 				LOAD  R0  0
@@ -131,9 +128,8 @@ do_calibration_round:
                 LOAD  R0  2500 
                 BRS  sleep_i		
                 PULL  R0
-				 BRS  scan_current_position
                  BRS  color_dsp
-				LOAD  R0  [GB+SCANNEDCOLOR]
+				LOAD  R0  [GB+ANALOG0]
 				 ADD  R3  R0
 				
 				
@@ -144,9 +140,8 @@ do_calibration_round:
                 LOAD  R0  2500 
                 BRS  sleep_i		
                 PULL  R0
-				 BRS  scan_current_position
                  BRS  color_dsp
-				LOAD  R0  [GB+SCANNEDCOLOR]
+				LOAD  R0  [GB+ANALOG0]
 				 ADD  R3  R0
 				
 				LOAD  R0  2
@@ -156,9 +151,8 @@ do_calibration_round:
                 LOAD  R0  2500 
                 BRS  sleep_i		
                 PULL  R0
-				 BRS  scan_current_position
                  BRS  color_dsp
-                LOAD  R0  [GB+SCANNEDCOLOR]
+                LOAD  R0  [GB+ANALOG0]
 				 ADD  R3  R0
 				
 				LOAD  R0  2
@@ -168,9 +162,8 @@ do_calibration_round:
                 LOAD  R0  2500 
                 BRS  sleep_i		
                 PULL  R0
-				 BRS  scan_current_position
                  BRS  color_dsp
-				LOAD  R0  [GB+SCANNEDCOLOR]
+				LOAD  R0  [GB+ANALOG0]
 				 ADD  R4  R0
 				
 				
@@ -181,11 +174,10 @@ do_calibration_round:
                 LOAD  R0  2500 
                 BRS  sleep_i		
                 PULL  R0
-				 BRS  scan_current_position
                  BRS  color_dsp
-				LOAD  R0  [GB+SCANNEDCOLOR]
+				LOAD  R0  [GB+ANALOG0]
 				 ADD  R2  R0
-				LOAD  R0  [GB+SCANNEDCOLOR]
+				LOAD  R0  [GB+ANALOG0]
 				 ADD  R4  R0
 				
 				LOAD  R0  0
@@ -195,9 +187,8 @@ do_calibration_round:
                 LOAD  R0  2500 
                 BRS  sleep_i		
                 PULL  R0
-				 BRS  scan_current_position
                  BRS  color_dsp
-				LOAD  R0  [GB+SCANNEDCOLOR]
+				LOAD  R0  [GB+ANALOG0]
 				 ADD  R4  R0
 				 
 				 
@@ -207,22 +198,24 @@ do_calibration_round:
 				 
                 LOAD  R0  R2	;halfway between black and bg
 				 ADD  R0  R3
-				 DIV  R0  2
+                 ADD  R0  R3
+				 DIV  R0  3
 				 
 				STOR  R0  [GB+BLACK_VALUE]
 				STOR  R0  [GB+DSP_DEC]
 				
-				LOAD  R0  10000 
+				LOAD  R0  5000 
                 BRS  sleep_i		
 				
 				LOAD  R0  R3	;halfway between bg and white
-				 ADD  R0  R4
-				 DIV  R0  2
+				 ADD  R0  R3
+                 ADD  R0  R4
+				 DIV  R0  3
 				 
 				STOR  R0  [GB+WHITE_VALUE]
 				STOR  R0  [GB+DSP_DEC]
 				
-				LOAD  R0  10000 
+				LOAD  R0  5000 
                 BRS  sleep_i		
 				
 				LOAD  R0  3

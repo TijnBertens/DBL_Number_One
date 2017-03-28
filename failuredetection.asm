@@ -20,14 +20,14 @@ check_engine_failure_6:
 			LOAD  R0  ' 0'
             LOAD  R1  [GB+BTN_6_TS]
 			 SUB  R1  R2
-			 CMP  R1  30000
+			 CMP  R1  25000
              
 			 BGT  error_state
 			 
             LOAD  R0  ' 1'
 			LOAD  R1  [GB+BTN_7_TS]
 			 SUB  R1  R2
-			 CMP  R1  30000
+			 CMP  R1  20000
              
 			 BGT  error_state
 			 

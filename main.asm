@@ -24,7 +24,7 @@
   ; MOTOR 0 - X-AXIS
   NEXTTIME0         DW  0
   PREVTIME0			DW  0
-  MOTORSPEED0 		DW  80
+  MOTORSPEED0 		DW  90
   MOTORDIRECTION0   DW  0
   ; MOTOR 1 - EXTRUDOR
   NEXTTIME1         DW  0
@@ -178,7 +178,38 @@ FORK_EDG_PER	DW
 @INCLUDE "windetection.asm"
   
 @CODE
-begin :          BRA  main         ;  skip subroutine Hex7Seg
+begin :         STOR  SP  [GB+ORIGINAL_SP]
+                LOAD  R5  IOAREA                ; R5 will store the start of the IOAREA.
+				LOAD  R0  [R5+TIMER]            ; Store the current timer in NEXTTIMEs
+                STOR  R0  [GB+NEXTTIME0]
+                STOR  R0  [GB+NEXTTIME1]
+                STOR  R0  [GB+NEXTTIME2]
+				STOR  R0  [GB+MOTORPREVTIME]
+                STOR  R0  [GB+BTN_6_TS]
+                STOR  R0  [GB+BTN_7_TS]
+                LOAD  R0  %011000000
+                STOR  R0  [GB+OUTPUTSTATE]
+                LOAD  R0  0
+
+                LOAD  R0  [GB+OUTPUTSTATE]
+                 AND  R0  %10111111
+                STOR  R0  [GB+OUTPUTSTATE]
+                
+                LOAD  R0  1
+                STOR  R0  [GB+IS_BUSY]
+                
+                 BRS  essential_routines
+                 BRS  do_calibration_round
+                
+                LOAD  R0  0
+                STOR  R0  [GB+IS_BUSY]
+                
+                ; turn player light on
+                LOAD  R0  [GB+OUTPUTSTATE]
+                  OR  R0  %01000000
+                STOR  R0  [GB+OUTPUTSTATE]
+
+                 BRA  main         ;  skip subroutine Hex7Seg
 
 
 ;  
@@ -198,6 +229,8 @@ main:		    STOR  SP  [GB+ORIGINAL_SP]
                 LOAD  R0  %011000000
                 STOR  R0  [GB+OUTPUTSTATE]
                 LOAD  R0  0
+                
+                
                 
 main_loop:       BRS  essential_routines
                  BRA  main_loop                      ; Loop back to the start of the loop.
@@ -233,13 +266,17 @@ reset_for:     STOR  R2  [R0]
                 BRA  main
 ;---------------------------------------------------------------------------------;	
 essential_routines:
-				BRS  poll_inputs     
-				BRS  handle_btns
-				BRS  check_engine_failure
-				BRS  handle_scanners
+			   PUSH  R0
+                
+                BRS  poll_inputs     
+                BRS  handle_btns
+                BRS  check_engine_failure
+                BRS  handle_scanners
 				BRS  update_display
-				BRS  check_pos
+                BRS  check_pos
     			BRS  drive_motors1
+                
+               PULL  R0
 				RTS
 
 poll_inputs:	PUSH  R0

@@ -92,6 +92,11 @@ btn2hld:	 LOAD  R1  R0				; check button 2 for toggle
 			  BRS  button_2_down	
 
 btn2up:      LOAD  R1  R0
+             LOAD  R2  [GB+PREVINPUTSTATE]
+              XOR  R1  %1
+              XOR  R2  %1
+              XOR  R2  R1
+              AND  R2  R1
               AND  R1  %00000100
               CMP  R1  0
               BNE  btn3hld
@@ -100,9 +105,20 @@ btn2up:      LOAD  R1  R0
 btn3hld:	 LOAD  R1  R0				; check button 3 for toggle
 			  AND  R1  %00001000
 			  CMP  R1  %00001000
-			  BNE  btn4hld
+			  BNE  btn3up
 			  BRS  button_3_down			  
 			  
+btn3up:      LOAD  R1  R0
+             LOAD  R2  [GB+PREVINPUTSTATE]
+              XOR  R1  %1
+              XOR  R2  %1
+              XOR  R2  R1
+              AND  R2  R1
+              AND  R1  %000001000
+              CMP  R1  0
+              BNE  btn4hld
+              BRS  button_3_up              
+              
 btn4hld:	 LOAD  R1  R0				; check button 4 for toggle
 			  AND  R1  %00010000
 			  CMP  R1  %00010000
@@ -188,7 +204,7 @@ button_2_toggled:       ;  Used to move motor back in down/up.
 ;---------------------------------------------------------------------------------;	
 			  
 button_3_toggled:
-            PUSH  R0
+;            PUSH  R0
 ;            LOAD  R0  %10000000
 ;            STOR  R0  [R5+OUTPUT]
 ;            STOR  R0  [GB+OUTPUTSTATE]
@@ -199,23 +215,7 @@ button_3_toggled:
 ;			 BEQ  pause_while
 ;            PULL  R0
 			; player light off
-			LOAD  R0  [GB+OUTPUTSTATE]
-			 AND  R0  %10111111
-			STOR  R0  [GB+OUTPUTSTATE]
-            
-            LOAD  R0  1
-            STOR  R0  [GB+IS_BUSY]
-			
-             BRS  do_calibration_round
-            
-			LOAD  R0  0
-            STOR  R0  [GB+IS_BUSY]
-			
-			; turn player light on
-			LOAD  R0  [GB+OUTPUTSTATE]
-			  OR  R0  %01000000
-			STOR  R0  [GB+OUTPUTSTATE]
-			 RTS
+			RTS
 
 ;---------------------------------------------------------------------------------;	
 			  
@@ -255,10 +255,15 @@ button_5_toggled:
 			  
 ;This is the button that is attatched to motor0 (x-axis);
 button_6_toggled:
-			PUSH  R0						
+			PUSH  R0				
+            
 			LOAD  R0  [GB+POS_X]
 			 ADD  R0  [GB+MOTORDIRECTION0]
 			STOR  R0  [GB+POS_X]
+            
+            LOAD  R0  [R5+TIMER]
+			STOR  R0  [GB+BTN_6_TS]
+            
 			PULL  R0
 			 RTS
 
@@ -267,9 +272,14 @@ button_6_toggled:
 ;This is the button that is attatched to motor2 (y-axis);			  
 button_7_toggled:
 			PUSH  R0
+            
 			LOAD  R0  [GB+POS_Y]
 			 ADD  R0  [GB+MOTORDIRECTION2]
 			STOR  R0  [GB+POS_Y]
+            
+            LOAD  R0  [R5+TIMER]
+			STOR  R0  [GB+BTN_7_TS]
+            
 			PULL  R0
 			 RTS	
 			 
@@ -307,6 +317,22 @@ button_2_down_while:
 ;---------------------------------------------------------------------------------;				 
 			 
 button_3_down:
+            PUSH  R0  
+            
+            LOAD  R0  1
+            STOR  R0  [GB+MOTORDIRECTION2]
+            LOAD  R0  0
+            STOR  R0  [GB+MOTORDIRECTION0]
+            STOR  R0  [GB+MOTORDIRECTION1]
+            
+button_3_down_while:
+             BRS  drive_motors1
+            LOAD  R0  [R5+INPUT]
+             AND  R0  %01000
+             CMP  R0  0
+             BNE  button_3_down_while
+            
+            PULL  R0
 			 RTS
 
 ;---------------------------------------------------------------------------------;				 
@@ -330,7 +356,7 @@ button_6_down:
             
             LOAD  R0  [R5+TIMER]
 			STOR  R0  [GB+BTN_6_TS]
-			
+
 button_6_down_r:
             PULL  R0
 			 RTS			 
@@ -361,8 +387,15 @@ button_2_up:
             PULL  R0
              RTS
 ;---------------------------------------------------------------------------------;	
-		
-
+button_3_up:
+            PUSH  R0  
+            
+            LOAD  R0  0
+            STOR  R0  [GB+MOTORDIRECTION2]
+            
+            PULL  R0
+             RTS
+;---------------------------------------------------------------------------------;	
 		
 ;---------------------------------------------------------------------------------;
 ;INPUT: R0 containing current direction. 

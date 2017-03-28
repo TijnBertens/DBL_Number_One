@@ -1,5 +1,5 @@
 @CODE
-BRA main
+BRA begin
    
 drive_motors1:	PUSH  R0
 				PUSH  R1
