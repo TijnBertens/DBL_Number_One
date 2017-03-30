@@ -301,6 +301,37 @@ check_win_diag2_r:              ADD  SP  1
                                PULL  R1
                                 RTS                   
 ;---------------------------------------------------------------------------------;
+check_tie:                     PUSH  R0
+                               PUSH  R1                     ; R1 = for counter
+                               PUSH  R2                     ; R2 = pointer to grid
+                               PUSH  R3                     ; R3 = amount of empty squares
+                               
+                               LOAD  R1  0                  ; for counter = 0
+                               LOAD  R3  0
+                               
+                               LOAD  R2  GB                 ; Store pointer to grid in R2
+                                ADD  R2  GRID
+                               
+check_tie_for:                 LOAD  R0  [R2+R1]            ; Load color present in the grid in R0
+                               
+                                CMP  R0  1                  ; If the color is not background we skip to the end of the for loop.
+                                BNE  check_tie_for_skip
+                                
+                                ADD  R3  1                  ; Color is background, so add one to counter.
+                                
+check_tie_for_skip:             ADD  R1  1                  ; increment for counter by 1.
+                                CMP  R1  8                  
+                                BLE  check_tie_for
+                               
+                                CMP  R3  0
+                                BEQ  tie
+            
+check_tie_r:                   PULL  R3
+                               PULL  R2
+                               PULL  R1
+                               PULL  R0
+                                RTS
+;---------------------------------------------------------------------------------;
 machine_win:                  LOAD  R0  -1
                               STOR  R0  [GB+DSP_DEC]
                               LOAD  R0  3

@@ -42,6 +42,8 @@ do_next_move:                  PUSH  R0
                                 
 do_next_move_r:                LOAD  R0  2
                                 BRS  check_win
+                                
+                                BRS  check_tie
 
                                LOAD  R0  3
                                LOAD  R1  2

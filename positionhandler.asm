@@ -107,11 +107,9 @@ scan_grid:      PUSH  R0
 				LOAD  R0  2
 				LOAD  R1  2
 				 BRS  move_to_pos
-                 ;BRS  place_disk
-                 ;BRS sleep
                 PUSH  R0
-                LOAD  R0  2500 
-                BRS  sleep_i		
+                ;LOAD  R0  2500 
+                ;BRS  sleep_i		
                 PULL  R0
                  BRS  scan_current_position
                  BRS  color_dsp
@@ -122,8 +120,8 @@ scan_grid:      PUSH  R0
 				LOAD  R1  2
 				 BRS  move_to_pos
                 PUSH  R0
-                LOAD  R0  2500 
-                BRS  sleep_i		
+                ;LOAD  R0  2500 
+                ;BRS  sleep_i		
                 PULL  R0
                   
                  ;BRS sleep
@@ -135,8 +133,8 @@ scan_grid:      PUSH  R0
 				LOAD  R1  2
 				 BRS  move_to_pos
                  PUSH  R0
-                LOAD  R0  2500 
-                BRS  sleep_i		
+                ;LOAD  R0  2500 
+                ;BRS  sleep_i		
                 PULL  R0
                   
                  ;BRS sleep
@@ -148,8 +146,8 @@ scan_grid:      PUSH  R0
 				LOAD  R1  1
 				 BRS  move_to_pos
                  PUSH  R0
-                LOAD  R0  2500 
-                BRS  sleep_i		
+                ;LOAD  R0  2500 
+                ;BRS  sleep_i		
                 PULL  R0
                   
                  ;BRS sleep
@@ -161,8 +159,8 @@ scan_grid:      PUSH  R0
 				LOAD  R1  0
 				 BRS  move_to_pos
                  PUSH  R0
-                LOAD  R0  2500 
-                BRS  sleep_i		
+                ;LOAD  R0  2500 
+                ;BRS  sleep_i		
                 PULL  R0
                   
                  ;BRS sleep
@@ -174,8 +172,8 @@ scan_grid:      PUSH  R0
 				LOAD  R1  0
 				 BRS  move_to_pos
                  PUSH  R0
-                LOAD  R0  2500 
-                BRS  sleep_i		
+                ;LOAD  R0  2500 
+                ;BRS  sleep_i		
                 PULL  R0
                   
                  ;BRS sleep
@@ -187,8 +185,8 @@ scan_grid:      PUSH  R0
 				LOAD  R1  0
 				 BRS  move_to_pos
                  PUSH  R0
-                LOAD  R0  2500 
-                BRS  sleep_i		
+                ;LOAD  R0  2500 
+                ;BRS  sleep_i		
                 PULL  R0
                   
                  ;BRS sleep
@@ -200,8 +198,8 @@ scan_grid:      PUSH  R0
 				LOAD  R1  1
 				 BRS  move_to_pos
                  PUSH  R0
-                LOAD  R0  2500 
-                BRS  sleep_i		
+                ;LOAD  R0  2500 
+                ;BRS  sleep_i		
                 PULL  R0
                   
                  ;BRS sleep
@@ -213,8 +211,8 @@ scan_grid:      PUSH  R0
 				LOAD  R1  1
 				 BRS  move_to_pos
                  PUSH  R0
-                LOAD  R0  2500 
-                BRS  sleep_i		
+                ;LOAD  R0  2500 
+                ;BRS  sleep_i		
                 PULL  R0
                   
                  ;BRS sleep

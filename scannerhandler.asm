@@ -133,8 +133,8 @@ do_calibration_round:
 				 ADD  R3  R0
 				
 				
-				LOAD  R0  1
-				LOAD  R1  1
+				LOAD  R0  0
+				LOAD  R1  0
 				 BRS  move_to_pos
                  PUSH  R0
                 LOAD  R0  2500 
@@ -144,8 +144,8 @@ do_calibration_round:
 				LOAD  R0  [GB+ANALOG0]
 				 ADD  R3  R0
 				
-				LOAD  R0  2
-				LOAD  R1  1
+				LOAD  R0  1
+				LOAD  R1  0
 				 BRS  move_to_pos
                  PUSH  R0
                 LOAD  R0  2500 
@@ -167,8 +167,8 @@ do_calibration_round:
 				 ADD  R4  R0
 				
 				
-				LOAD  R0  1
-				LOAD  R1  0
+				LOAD  R0  2
+				LOAD  R1  1
 				 BRS  move_to_pos
                  PUSH  R0
                 LOAD  R0  2500 
@@ -180,8 +180,8 @@ do_calibration_round:
 				LOAD  R0  [GB+ANALOG0]
 				 ADD  R4  R0
 				
-				LOAD  R0  0
-				LOAD  R1  0
+				LOAD  R0  1
+				LOAD  R1  1
 				 BRS  move_to_pos
                  PUSH  R0
                 LOAD  R0  2500 
