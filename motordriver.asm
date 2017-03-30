@@ -8,11 +8,11 @@ drive_motors1:	PUSH  R0
 				
 				LOAD  R0  [R5+TIMER]			;  R0 := current time
 				LOAD  R1  [GB+MOTORPREVTIME]	;  R1 := prev time
-				LOAD  R2  R1					;  R0 := prev time
+				LOAD  R2  R1					;  R2 := prev time
 				 SUB  R2  R0					;  R2 := prev - new
 
 m0:				 CMP  R2  [GB+MOTORSPEED0]      ;  if(R2 > motorspeed)
-				 BLE  m1	;dont turn off
+				 BLE  m1						;dont turn off
 				
 				LOAD  R3  [GB+OUTPUTSTATE]		;  turn off motor 0
 				 AND  R3  %111111100
@@ -44,19 +44,19 @@ on:				 CMP  R2  100
 				 BRA  m1_right
 m0_left:		  OR  R3  %000000010
 				  
-m1_right:		LOAD  R4  [GB+MOTORDIRECTION1]
-				 CMP  R4  0
-				 BEQ  m2_right
-				 BLT  m1_left
-				  OR  R3  %000000100
+m1_right:		LOAD  R4  [GB+MOTORDIRECTION1]	; R4 := motordirection
+				 CMP  R4  0						; check the motor direction {-1,0,1}
+				 BEQ  m2_right					; 0 => off
+				 BLT  m1_left					; -1 => left
+				  OR  R3  %000000100			;  1 => right
 				 BRA  m2_right
 m1_left:		  OR  R3  %000001000
 
-m2_right:		LOAD  R4  [GB+MOTORDIRECTION2]
-				 CMP  R4  0
-				 BEQ  m_end
-				 BLT  m2_left 
-				  OR  R3  %000010000
+m2_right:		LOAD  R4  [GB+MOTORDIRECTION2]	; R4 := motordirection
+				 CMP  R4  0						; check the motor direction {-1,0,1}
+				 BEQ  m_end						; 0 => off
+				 BLT  m2_left 					; -1 => left
+				  OR  R3  %000010000			;  1 => right
 				 BRA  m_end
 m2_left:		  OR  R3  %000100000
 				  
