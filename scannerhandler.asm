@@ -90,8 +90,8 @@ do_calibration_round:
 				LOAD  R1  2
 				 BRS  move_to_pos
                 PUSH  R0
-                LOAD  R0  2500 
-                BRS  sleep_i		
+                ;LOAD  R0  2500 
+                ;BRS  sleep_i		
                 PULL  R0
                  BRS  color_dsp
 				LOAD  R0  [GB+ANALOG0]
@@ -103,8 +103,8 @@ do_calibration_round:
 				LOAD  R1  2
 				 BRS  move_to_pos
                 PUSH  R0
-                LOAD  R0  2500 
-                BRS  sleep_i		
+                ;LOAD  R0  2500 
+                ;BRS  sleep_i		
                 PULL  R0
                  BRS  color_dsp
 				LOAD  R0  [GB+ANALOG0]
@@ -114,8 +114,8 @@ do_calibration_round:
 				LOAD  R1  2
 				 BRS  move_to_pos
                  PUSH  R0
-                LOAD  R0  2500 
-                BRS  sleep_i		
+                ;LOAD  R0  2500 
+                ;BRS  sleep_i		
                 PULL  R0
                  BRS  color_dsp
 				LOAD  R0  [GB+ANALOG0]
@@ -125,8 +125,8 @@ do_calibration_round:
 				LOAD  R1  1
 				 BRS  move_to_pos
                  PUSH  R0
-                LOAD  R0  2500 
-                BRS  sleep_i		
+                ;LOAD  R0  2500 
+                ;BRS  sleep_i		
                 PULL  R0
                  BRS  color_dsp
 				LOAD  R0  [GB+ANALOG0]
@@ -137,8 +137,8 @@ do_calibration_round:
 				LOAD  R1  0
 				 BRS  move_to_pos
                  PUSH  R0
-                LOAD  R0  2500 
-                BRS  sleep_i		
+                ;LOAD  R0  2500 
+                ;BRS  sleep_i		
                 PULL  R0
                  BRS  color_dsp
 				LOAD  R0  [GB+ANALOG0]
@@ -148,8 +148,8 @@ do_calibration_round:
 				LOAD  R1  0
 				 BRS  move_to_pos
                  PUSH  R0
-                LOAD  R0  2500 
-                BRS  sleep_i		
+                ;LOAD  R0  2500 
+                ;BRS  sleep_i		
                 PULL  R0
                  BRS  color_dsp
                 LOAD  R0  [GB+ANALOG0]
@@ -159,8 +159,8 @@ do_calibration_round:
 				LOAD  R1  0
 				 BRS  move_to_pos
                  PUSH  R0
-                LOAD  R0  2500 
-                BRS  sleep_i		
+                ;LOAD  R0  2500 
+                ;BRS  sleep_i		
                 PULL  R0
                  BRS  color_dsp
 				LOAD  R0  [GB+ANALOG0]
@@ -171,8 +171,8 @@ do_calibration_round:
 				LOAD  R1  1
 				 BRS  move_to_pos
                  PUSH  R0
-                LOAD  R0  2500 
-                BRS  sleep_i		
+                ;LOAD  R0  2500 
+                ;BRS  sleep_i		
                 PULL  R0
                  BRS  color_dsp
 				LOAD  R0  [GB+ANALOG0]
@@ -184,8 +184,8 @@ do_calibration_round:
 				LOAD  R1  1
 				 BRS  move_to_pos
                  PUSH  R0
-                LOAD  R0  2500 
-                BRS  sleep_i		
+                ;LOAD  R0  2500 
+                ;BRS  sleep_i		
                 PULL  R0
                  BRS  color_dsp
 				LOAD  R0  [GB+ANALOG0]
@@ -204,7 +204,7 @@ do_calibration_round:
 				STOR  R0  [GB+BLACK_VALUE]
 				STOR  R0  [GB+DSP_DEC]
 				
-				LOAD  R0  5000 
+				LOAD  R0  10000 
                 BRS  sleep_i		
 				
 				LOAD  R0  R3	;halfway between bg and white
@@ -215,7 +215,7 @@ do_calibration_round:
 				STOR  R0  [GB+WHITE_VALUE]
 				STOR  R0  [GB+DSP_DEC]
 				
-				LOAD  R0  5000 
+				LOAD  R0  10000 
                 BRS  sleep_i		
 				
 				LOAD  R0  3
