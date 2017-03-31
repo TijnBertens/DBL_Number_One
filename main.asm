@@ -198,10 +198,20 @@ begin :         STOR  SP  [GB+ORIGINAL_SP]
                 LOAD  R0  1
                 STOR  R0  [GB+IS_BUSY]
                 
+begin_while:     BRS  poll_inputs
+                LOAD  R0  [R5+INPUT]
+                 AND  R0  %01
+                 CMP  R0  %01
+                 BEQ  begin_skip
+                LOAD  R0  [R5+INPUT]
+                 AND  R0  %010000
+                 CMP  R0  %010000
+                 BNE  begin_while
+                
                  BRS  essential_routines
                  BRS  do_calibration_round
                 
-                LOAD  R0  0
+begin_skip:     LOAD  R0  0
                 STOR  R0  [GB+IS_BUSY]
                 
                 ; turn player light on
@@ -209,7 +219,7 @@ begin :         STOR  SP  [GB+ORIGINAL_SP]
                   OR  R0  %01000000
                 STOR  R0  [GB+OUTPUTSTATE]
 
-                 BRA  main         ;  skip subroutine Hex7Seg
+                 BRA  main
 
 
 ;  
