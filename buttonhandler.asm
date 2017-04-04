@@ -14,7 +14,7 @@ handle_btns: PUSH  R0
               CMP  R2  0
               BEQ  btn0tgl
               
-              AND  R0  %11101001
+              AND  R0  %11100001
 			  
 btn0tgl:	 LOAD  R1  R0				; check button 0 for toggle
 			  AND  R1  %00000001
@@ -71,7 +71,7 @@ btns_down:	 LOAD  R0  [GB+INPUTSTATE]
              LOAD  R2  [GB+IS_BUSY]
               CMP  R2  0
               BEQ  btn0hld
-              AND  R0  %11101001
+              AND  R0  %11100001
 
 btn0hld:	 LOAD  R1  R0				; check button 0 for toggle
 			  AND  R1  %00000001

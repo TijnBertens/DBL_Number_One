@@ -17,8 +17,8 @@
   ; COLOR SCANNER
   SCANNEDCOLOR		DW  0		  ;  0 - white, 1 - background, 2 - black
   PREVSCANNEDCOLOR	DW  0
-  WHITE_VALUE       DW  130
-  BLACK_VALUE       DW  200
+  WHITE_VALUE       DW  142
+  BLACK_VALUE       DW  225
   
   MOTORPREVTIME		DW  0
   ; MOTOR 0 - X-AXIS
